@@ -32,7 +32,7 @@ public class Partone {
         String password = input.nextLine();
         
         
-        System.out.println("Please enter your cellphone number,(e.g+278449456807");
+        System.out.println("Please enter your cellphone number,(e.g+278449456807,0849406902");
         String cellphoneNumber = input.nextLine();
         
         
