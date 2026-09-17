@@ -62,7 +62,7 @@ public  boolean checkPasswordComplexity(){ //(Stack Overflow, 2025)
 // method to check if cellphone number is valid and must start with +27 or 27 and followed by digits
 public  boolean checkCellPhoneNumber(){
     boolean cellPhoneNo;
-     String regexPattern = "^(\\+27|0)[0-9]{1,10}$"; //(Stack Overflow, 2025),(NumberCrunch Programmers, 2024)
+     String regexPattern = "^(\\+27|27)[0-9]{1,10}$"; //(Stack Overflow, 2025),(NumberCrunch Programmers, 2024)
      
     if (cellphoneNumber.matches(regexPattern)){//regex is a  JavaScript regular expression used to validate a standard 10-digit phone number format
         cellPhoneNo = true;
