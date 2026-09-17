@@ -60,6 +60,13 @@ public class Partone {
         
       
     }
+// Refrence list
+
+//YouTube. (2025). MOhiM2SXZl0 [online video]. Available at: https://www.youtube.com/watch?v=MOhiM2SXZl0 [Accessed 15 September 2026]
+//Stack Overflow, 2025. Regex pattern for South African cellphone validation. [computer program/code]. Available at: https://stackoverflow.com/... [Accessed 15 September 2026].
+// Stack Overflow, 2025. Password complexity validation regex and method. [computer program/code]. Available at: https://stackoverflow.com/... [Accessed 15 September 2026].
+// Farrell, J., 2022. Java programming. 10th ed. Boston: Cengage Learning.
+
     
 
 
