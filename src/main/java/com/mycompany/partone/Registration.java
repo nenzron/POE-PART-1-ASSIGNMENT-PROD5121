@@ -78,10 +78,8 @@ public  boolean checkCellPhoneNumber(){
         if (!checkPasswordComplexity()) {
             return "Password is not correctly formatted; please ensure that the password contains at least eight characters, a capital letter, a number, and a special character";
         }
-        if (!checkCellPhoneNumber()) {
-            return "Cell phone number incorrectly formatted or does not contain international code";
-        }
-        return "Username and password successfully captured. Cell phone number successfully added";
+        
+        return "Username and password successfully captured.";
     }
   // method to check if entered login details match stored username and password
   public boolean loginUser(String enteredusername, String enteredpassword) {
