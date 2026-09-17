@@ -54,7 +54,7 @@ public class Partone {
         }else{
             System.out.println("details are not register correctly");
         }  
-      
+       
         
         System.out.println(obj.returnLoginStatus( enteredusername, enteredpassword,firstname, lastname));
     }

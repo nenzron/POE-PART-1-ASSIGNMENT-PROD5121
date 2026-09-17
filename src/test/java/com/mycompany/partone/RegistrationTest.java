@@ -31,7 +31,7 @@ public class RegistrationTest {
    boolean expected = true;
     boolean actual = obj.loginUser(enteredusername, enteredpassword, firstname, lastname);
 
-    assertEquals(expected, actual);
+    assertEquals(expected, actual,"Welcome " + firstname + " " + lastname + ", it is great to see you again.");
    }
    // test to check if username has underscore and is at least 5 characters, testing the data "Kyle!!!!!" to be invalid using assertEquals
     @Test
