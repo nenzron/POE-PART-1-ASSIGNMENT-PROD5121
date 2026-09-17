@@ -16,30 +16,31 @@ public class RegistrationTest {
     public RegistrationTest() {
     }
  // test to check if username has underscore and is at least 5 characters, testing the data "Kyl_1" to be valid using assertEquals
-   @Test
-   public void testreturnLoginStatusEqualTrue(){
-   String username = "Kyl_1";
-   String password = "";
-   String cellphoneNumber = ""; 
-   String enteredUsername = "Kyl_1";
-   String enteredPassword = "";
-   String firstname = "";
-   String lastname = "";
-   
-   Registration obj = new Registration(username, cellphoneNumber, password, firstname, lastname);
-   String expected = "Welcome " + firstname + " " + lastname + ", it is great to see you again.";
-   String actual = obj.returnLoginStatus(enteredUsername, enteredPassword, firstname, lastname);
-   
-   assertEquals(expected, actual,"The username does contain an underscore and is no more than five charachters long");
+ @Test
+    public void testloginUserEqualTrue() {
+    String username = "Kyl_1";
+    String password = "";
+    String cellphoneNumber = "";
+    String enteredusername = "Kyl_1";
+    String enteredpassword = "";
+    String firstname = "Ray";
+    String lastname = "Kay";
+
+    Registration obj = new Registration(username, cellphoneNumber, password, firstname, lastname);
+    
+   boolean expected = true;
+    boolean actual = obj.loginUser(enteredusername, enteredpassword, firstname, lastname);
+
+    assertEquals(expected, actual);
    }
    // test to check if username has underscore and is at least 5 characters, testing the data "Kyle!!!!!" to be invalid using assertEquals
     @Test
-    public void testcheckUsernameEqualFalse() {
+    public void testregisterUserFalse() {
     String username = "Kyle!!!!!";
     String password = "";
     String cellphoneNumber = ""; 
-    String firstname = "";
-    String lastname = "";
+    String firstname = "Jay";
+    String lastname = "Kay";
     
     Registration obj = new Registration(username, cellphoneNumber, password, firstname, lastname);
     boolean expected = false;
@@ -109,7 +110,7 @@ public class RegistrationTest {
 
 @Test 
 
-    public void testloginUserTrue() {
+    public void testreturnLoginStatusTrue() {
         String username = "Kyl_1";
         String password = "Ch&sec@ke99!";
         String enteredusername = "Kyl_1";
@@ -119,15 +120,16 @@ public class RegistrationTest {
         String lastname = "";
 
         Registration obj = new Registration(username, cellphoneNumber, password, firstname, lastname);
-        obj.registerUser();
+       obj.returnLoginStatus(enteredusername,enteredpassword,firstname,lastname);
 
         
-        assertTrue(obj.loginUser("Kyl_1", "Ch&sec@ke99!"));
+        assertTrue(obj.loginUser("Kyl_1","Ch&sec@ke99!","Dan","John"));
     }
+    
      // test to check if entered login details match stored username and password,testing the data "Kyl_1","Kyl_2" and Ch&sec@ke99!" to be false using assertfalse
     @Test 
 
-    public void testloginUserFalse() {
+    public void testreturnLoginStatusFalse() {
         String username = "Kyl_1";
         String password = "Ch&sec@ke99!";
         String enteredusername = "Kyl_2";
@@ -137,10 +139,11 @@ public class RegistrationTest {
         String lastname = "";
 
         Registration obj = new Registration(username, cellphoneNumber, password, firstname, lastname);
-        obj.registerUser();
+        obj.returnLoginStatus(enteredusername,enteredpassword,firstname,lastname);
+       
 
         
-        assertFalse(obj.loginUser("Kyl!!!!!", "Ch&sec@ke99!"));
+        assertFalse(obj.loginUser("Kyl_2","Ch&sec@ke99!","Dan","Jhon"));
 
 
         

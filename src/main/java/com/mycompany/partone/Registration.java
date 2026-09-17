@@ -95,15 +95,15 @@ public  boolean checkCellPhoneNumber(){
         return "Username and password successfully captured.";
     }
   // method to check if entered login details match stored username and password
-  public boolean loginUser(String enteredusername, String enteredpassword) {
+  public boolean loginUser(String enteredusername, String enteredpassword,String firstname, String lastname) {
         boolean logindetails;
         
         if (enteredusername.equals(username) && enteredpassword.equals(password)){
             logindetails = true;
-            System.out.println("Login details are correct");
+            System.out.println("Welcome " + firstname + " " + lastname + ", it is great to see you again.");
         }else{
             logindetails = false;
-            System.out.println("Login details are incorrect,try again!");
+            System.out.println("Username or password incorrect, please try again.");
             
         }
         return logindetails;
@@ -112,12 +112,12 @@ public  boolean checkCellPhoneNumber(){
     // method to return login status message if the login is successfull or failed)
     public String returnLoginStatus(String enteredusername, String enteredpassword, String firstname, String lastname) {
        
-        if (loginUser(enteredusername, enteredpassword)) {
+        if (loginUser(enteredusername, enteredpassword,firstname,lastname)) {
             
-            return "Welcome " + firstname + " " + lastname + ", it is great to see you again.";
+            return "Login details are correct";
         } else {
           
-            return "Username or password incorrect, please try again.";
+            return "Login details are incorrect,try again!";
         }
     }
     
