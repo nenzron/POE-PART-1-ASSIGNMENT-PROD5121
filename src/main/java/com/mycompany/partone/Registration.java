@@ -1,0 +1,113 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.partone;
+
+/**
+ *
+ * @author fhumu
+ */
+public class Registration {
+    private String username;
+    private String password;
+    private String cellphoneNumber;
+    public String firstname;
+    public String lastname;
+    
+    // constructor to set all values when creating object
+public Registration(String username,String cellphoneNumber,String password,String firstname,String lastname){
+        
+        this.username = username;
+        this.password =  password;
+        this.cellphoneNumber = cellphoneNumber;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        
+    }
+// method to check if username has underscore and is no more than 5 characters
+public boolean checkUserName(){
+   boolean Usersname;
+   
+   if (username.length()<=5 && username.contains("_")){
+       Usersname = true;
+       System.out.println("Username successfully captured");
+   }else{
+       Usersname = false;
+       System.out.println("Username is not correctly formatted; please ensure that your username contains an underscore and is no more than five characters in length");
+   }
+   System.out.println("Username:" + username);   
+   return Usersname;
+}
+
+// method to check if password length is less than, equal to 8, has an uppercase, has a number, has a special character)
+public  boolean checkPasswordComplexity(){ //(Stack Overflow, 2025)
+    boolean UserPassword;
+
+    if (password.length() >= 8 && password.matches(".*[A-Z].*") && password.matches(".*[0-9].*")  && password.matches(".*[^a-zA-Z0-9].*")) {
+        UserPassword = true;
+        System.out.println("Password successfully captured");
+    } else {
+        UserPassword = false;
+        System.out.println("Password is not correctly formatted; please ensure that the password contains at least eight characters, a capital letter, a number, and a special character.");
+    }
+
+    return UserPassword;
+}
+// method to check if cellphone number is valid and must start with +27 or 27 and followed by digits
+public  boolean checkCellPhoneNumber(){
+    boolean cellPhoneNo;
+     String regexPattern = "^(\\+27|27)[0-9]{1,10}$"; //(Stack Overflow, 2025)
+     
+    if (cellphoneNumber.matches(regexPattern)){
+        cellPhoneNo = true;
+        System.out.println("Cell phone number is successfully added");
+    }else{
+        cellPhoneNo = false;
+        System.out.println("Cell phone number incorrectly formatted or does not contain international code");
+    }
+    return cellPhoneNo;
+        
+}
+// method to register user by checking username, password, and cellphone number
+  public  String registerUser( ){
+      
+ if (!checkUserName()) {
+            return "Username is not correctly formatted; please ensure that your username contains an underscore and is no more than five characters in length";
+        }
+        if (!checkPasswordComplexity()) {
+            return "Password is not correctly formatted; please ensure that the password contains at least eight characters, a capital letter, a number, and a special character";
+        }
+        if (!checkCellPhoneNumber()) {
+            return "Cell phone number incorrectly formatted or does not contain international code";
+        }
+        return "Username and password successfully captured. Cell phone number successfully added";
+    }
+  // method to check if entered login details match stored username and password
+  public boolean loginUser(String enteredusername, String enteredpassword) {
+        boolean logindetails;
+        
+        if (username.equals(enteredusername) && password.equals(enteredpassword)){
+            logindetails = true;
+            System.out.println("Login details are correct");
+        }else{
+            logindetails = false;
+            System.out.println("Login details are incorrect,try again!");
+            
+        }
+        return logindetails;
+    }
+
+    // method to return login status message if the login is successfull or failed)
+    public String returnLoginStatus(String enteredusername, String enteredpassword, String firstname, String lastname) {
+       
+        if (loginUser(enteredusername, enteredpassword)) {
+            
+            return "Welcome " + firstname + " " + lastname + ", it is great to see you again.";
+        } else {
+          
+            return "Username or password incorrect, please try again.";
+        }
+    }
+    
+}
