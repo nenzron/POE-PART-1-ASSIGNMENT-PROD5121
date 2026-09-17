@@ -87,7 +87,7 @@ public  boolean checkCellPhoneNumber(){
   public boolean loginUser(String enteredusername, String enteredpassword) {
         boolean logindetails;
         
-        if (username.equals(enteredusername) && password.equals(enteredpassword)){
+        if (enteredusername.equals(username) && enteredpassword.equals(password)){
             logindetails = true;
             System.out.println("Login details are correct");
         }else{
