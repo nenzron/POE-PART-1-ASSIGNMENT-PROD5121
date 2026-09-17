@@ -67,6 +67,7 @@ public class Partone {
 //Stack Overflow, 2025. Regex pattern for South African cellphone validation. [computer program/code]. Available at: https://stackoverflow.com/... [Accessed 15 September 2026].
 // Stack Overflow, 2025. Password complexity validation regex and method. [computer program/code]. Available at: https://stackoverflow.com/... [Accessed 15 September 2026].
 // Farrell, J., 2022. Java programming. 10th ed. Boston: Cengage Learning.
+//NumberCrunch Programmers. (2024). Java program to validate South African phone numbers using RegeX [online video]. Available at: https://www.youtube.com/watch?v=2M1CpEJZ6rk [Accessed 17 September 2026].
 
     
 
