@@ -45,7 +45,7 @@ public class Partone {
         
       
     
-        if (Registerresult.equals("Username and password successfully captured. Cell phone number successfully added")){
+        if (Registerresult.equals("Username and password successfully captured.")){
          System.out.println("Please enter your username");
          enteredusername = input.nextLine();
         

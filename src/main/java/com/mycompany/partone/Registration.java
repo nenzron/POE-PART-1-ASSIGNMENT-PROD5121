@@ -6,7 +6,7 @@ package com.mycompany.partone;
 
 /**
  *
- * @author fhumu
+ * @author Ronewa
  */
 public class Registration {
     private String username;
@@ -87,7 +87,11 @@ public  boolean checkCellPhoneNumber(){
                     + "please ensure that the password contains at least eight characters, a capital letter,"
                     + " a number, and a special character";
         }
-        
+        // This if was not required but i added it because without it the user can still access the login with a fake number
+        if (!checkCellPhoneNumber()){
+            return "Cell phone number incorrectly formatted or does not contain international code";
+         
+  }
         return "Username and password successfully captured.";
     }
   // method to check if entered login details match stored username and password

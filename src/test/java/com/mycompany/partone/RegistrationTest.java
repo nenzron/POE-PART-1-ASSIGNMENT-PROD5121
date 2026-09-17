@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
- * @author fhumu
+ * @author Ronewa
  */
 public class RegistrationTest {
     
