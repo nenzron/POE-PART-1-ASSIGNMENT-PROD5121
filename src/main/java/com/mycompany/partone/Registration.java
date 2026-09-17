@@ -38,7 +38,7 @@ public boolean checkUserName(){
                + " please ensure that your username contains an underscore "
                + "and is no more than five characters in length");
    }
-   System.out.println("Username:" + username);   
+     
    return Usersname;
 }
 
@@ -62,7 +62,7 @@ public  boolean checkPasswordComplexity(){ //(Stack Overflow, 2025)
 // method to check if cellphone number is valid and must start with +27 or 27 and followed by digits
 public  boolean checkCellPhoneNumber(){
     boolean cellPhoneNo;
-     String regexPattern = "^(\\+27|27)[0-9]{1,10}$"; //(Stack Overflow, 2025)
+     String regexPattern = "^(\\+27|0)[0-9]{1,10}$"; //(Stack Overflow, 2025)
      
     if (cellphoneNumber.matches(regexPattern)){
         cellPhoneNo = true;
