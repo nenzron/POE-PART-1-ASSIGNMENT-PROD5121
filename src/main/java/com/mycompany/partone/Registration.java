@@ -34,7 +34,9 @@ public boolean checkUserName(){
        System.out.println("Username successfully captured");
    }else{
        Usersname = false;
-       System.out.println("Username is not correctly formatted; please ensure that your username contains an underscore and is no more than five characters in length");
+       System.out.println("Username is not correctly formatted;"
+               + " please ensure that your username contains an underscore "
+               + "and is no more than five characters in length");
    }
    System.out.println("Username:" + username);   
    return Usersname;
@@ -44,12 +46,15 @@ public boolean checkUserName(){
 public  boolean checkPasswordComplexity(){ //(Stack Overflow, 2025)
     boolean UserPassword;
 
-    if (password.length() >= 8 && password.matches(".*[A-Z].*") && password.matches(".*[0-9].*")  && password.matches(".*[^a-zA-Z0-9].*")) {
+    if (password.length() >= 8 && password.matches(".*[A-Z].*") && password.matches(".*[0-9].*")
+            && password.matches(".*[^a-zA-Z0-9].*")) {
         UserPassword = true;
         System.out.println("Password successfully captured");
     } else {
         UserPassword = false;
-        System.out.println("Password is not correctly formatted; please ensure that the password contains at least eight characters, a capital letter, a number, and a special character.");
+        System.out.println("Password is not correctly formatted;"
+                + " please ensure that the password contains at least eight characters, a capital letter, "
+                + "a number, and a special character.");
     }
 
     return UserPassword;
@@ -73,10 +78,14 @@ public  boolean checkCellPhoneNumber(){
   public  String registerUser( ){
       
  if (!checkUserName()) {
-            return "Username is not correctly formatted; please ensure that your username contains an underscore and is no more than five characters in length";
+            return "Username is not correctly formatted; "
+                    + "please ensure that your username contains an underscore "
+                    + "and is no more than five characters in length";
         }
         if (!checkPasswordComplexity()) {
-            return "Password is not correctly formatted; please ensure that the password contains at least eight characters, a capital letter, a number, and a special character";
+            return "Password is not correctly formatted; "
+                    + "please ensure that the password contains at least eight characters, a capital letter,"
+                    + " a number, and a special character";
         }
         
         return "Username and password successfully captured.";

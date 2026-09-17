@@ -27,7 +27,8 @@ public class Partone {
          System.out.println("Please enter your username,(must contain '_' and be no more than 5 charachter)");
          String username = input.nextLine();
         
-        System.out.println("Please enter your password, (must contain 8+ charachter, a capital letter, a number, a special character)");
+        System.out.println("Please enter your password,"
+                 + " (must contain 8+ charachter, a capital letter, a number, a special character)");
         String password = input.nextLine();
         
         

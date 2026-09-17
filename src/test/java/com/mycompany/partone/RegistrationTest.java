@@ -46,7 +46,8 @@ public class RegistrationTest {
     boolean actual = obj.checkUserName();
     
     
-   assertEquals(expected, actual,"The username does not contain an underscore and is no more than five charachters long");
+   assertEquals(expected, actual,"The username does not contain an "
+           + "underscore and is no more than five charachters long");
    } 
     // test to check if password length is less than, equal to 8, has an uppercase, has a number, has a special character, testing the data Ch&&sec@ke99! to be valid using assertequals
    @Test
