@@ -14,7 +14,7 @@ public class Partone {
 
     
   public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+       Scanner input = new Scanner(System.in);
         
         
         //This questions are asked from the user and are used in checkUserName, checkPasswordComplexity, checkCellphoneNumber, register user, login user and returnloginuser which are in the external class
@@ -60,7 +60,12 @@ public class Partone {
     }
         
       
-    }
+      
+       
+     
+  }
+
+
 // Refrence list
 
 //YouTube. (2025). MOhiM2SXZl0 [online video]. Available at: https://www.youtube.com/watch?v=MOhiM2SXZl0 [Accessed 15 September 2026]
