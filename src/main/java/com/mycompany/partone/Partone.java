@@ -74,13 +74,13 @@ public class Partone {
         System.out.println("Welcome to QuickChat.");
         
     System.out.print("How many messages do you wish to enter? ");
-    int maxMessages = input.nextInt();
+    int maxMessages = Integer.parseInt(input.nextLine());
     int entered = 0;
 
         
     
          int choice = 0;
-    while (choice != 3) {
+    while (choice != 3) { //keep repeating the code in the braces as long as choice is not 3
         System.out.println("\n1) Send Messages");
         System.out.println("2) Show recently sent messages");
         System.out.println("3) Quit");
@@ -94,7 +94,7 @@ public class Partone {
             System.out.println("Send Messages selected");
 
             // NEW: only allow the set number of messages
-             if (entered > maxMessages) {
+             if (entered >= maxMessages) {
                     System.out.println("You have already entered all " + maxMessages + " messages.");
                     break; // leaves the switch, back to the menu
                 }
@@ -122,8 +122,9 @@ public class Partone {
           String printMessage = "";
           String Totalmessage = "";
           String messageNumber = "";
+          String Textmessage = "";
         Message msg = new Message( messageID,Reciepentcell, messagehash,
-         printMessage, Totalmessage,messageNumber);
+         printMessage, Totalmessage,messageNumber,Textmessage);
                 String cellCheck = msg.checkReciepentCell();
                 System.out.println(cellCheck);
                 if (!cellCheck.equals("Cell phone number successfully captured.")) {

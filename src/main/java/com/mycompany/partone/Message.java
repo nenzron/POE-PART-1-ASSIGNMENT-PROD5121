@@ -5,6 +5,7 @@
 package com.mycompany.partone;
 
 import java.util.Random;
+import java.util.Scanner;
 /**
  *
  * @author fhumu
@@ -16,9 +17,12 @@ public class Message {
     private String printMessage;
     private String Totalmessage;
     private String messageNumber;
+    private String Textmessage;
+    private String sentMessage;
 
 public Message(String messageID,String Reciepentcell, String messagehash,
-        String printMessage,String Totalmessage,String messageNumber){
+        String printMessage,String Totalmessage,String messageNumber,String Textmessage
+         ,String sentMessage){
         
         this.messageID = messageID; 
         this.Reciepentcell =  Reciepentcell;
@@ -26,6 +30,8 @@ public Message(String messageID,String Reciepentcell, String messagehash,
         this.printMessage = printMessage;
         this.Totalmessage = Totalmessage;
         this.messageNumber = messageNumber;
+        this.Textmessage = Textmessage;
+        this.sentMessage = sentMessage;
         
     }
 
@@ -55,14 +61,41 @@ public String checkReciepentCell(){
 }
  public String createMessagehash(){
       String firstTwo = messageID.substring(0, 2);
-        String trimmed = messageText.trim(); //removes spaces at the start and end
+        String trimmed = Textmessage.trim(); //removes spaces at the start and end
         String[] words = trimmed.split("\\s+"); // splits the message into arrays
         String firstWord = words[0];
         String lastWord = words[words.length - 1];
         return (firstTwo + ":" + messageNumber + ":" + firstWord + lastWord).toUpperCase();
  }
+ 
 public String sentMessage(){
-    
+        Scanner input = new Scanner(System.in);
+        System.out.println("Choose an option:");
+        System.out.println("1) Send Message");
+        System.out.println("2) Disregard Message");
+        System.out.println("3) Store Message");
+        String choice = input.nextLine().trim();
+
+        
+        switch (choice) {
+            case "1":
+                sentMessage.add(this);
+                Totalmessage++;
+                return "Message successfully sent";
+            case "2":
+                System.out.println("Press 0 to delete the message");
+                String confirm = input.nextLine().trim();
+                if (confirm.equals("0")) {
+                    return "Message disregarded";
+                }
+                return "Message not deleted";
+            case "3":
+                storeMessage();
+                return "Message successfully stored";
+            default:
+                return "Invalid option, message was not sent";
+        }
+
 }
 public String printMessage(){
     
