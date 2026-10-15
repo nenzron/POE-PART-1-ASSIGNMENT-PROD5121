@@ -12,7 +12,7 @@ import java.util.Scanner;
  */
 public class Partone {
 
-    
+
   public static void main(String[] args) {
        Scanner input = new Scanner(System.in);
         
@@ -51,19 +51,110 @@ public class Partone {
         
         System.out.println("Please enter your password");
          enteredpassword = input.nextLine();
+        
+
         }else{
             System.out.println("details are not register correctly");
         }  
-       
         
-        System.out.println(obj.returnLoginStatus( enteredusername, enteredpassword,firstname, lastname));
-    }
-        
-      
-      
-       
-     
+        String loginStatus = obj.returnLoginStatus(enteredusername, enteredpassword, firstname, lastname);
+        System.out.println(loginStatus);
+
+        // Users may only use QuickChat if they logged in successfully
+        if (loginStatus.equals("Login details are correct")) {
+            Partone old = new Partone();
+            old.runQuickChat();
+        }
   }
+
+    // QuickChat menu and message loop (Part 2)
+    public  void runQuickChat() {
+        Scanner input = new Scanner(System.in);
+    
+        System.out.println("Welcome to QuickChat.");
+        
+    System.out.print("How many messages do you wish to enter? ");
+    int maxMessages = input.nextInt();
+    int entered = 0;
+
+        
+    
+         int choice = 0;
+    while (choice != 3) {
+        System.out.println("\n1) Send Messages");
+        System.out.println("2) Show recently sent messages");
+        System.out.println("3) Quit");
+        System.out.print("Choose an option: ");
+
+        choice = Integer.parseInt(input.nextLine());
+
+         switch (choice) {
+        case 1:
+            // your send messages code goes here
+            System.out.println("Send Messages selected");
+
+            // NEW: only allow the set number of messages
+             if (entered > maxMessages) {
+                    System.out.println("You have already entered all " + maxMessages + " messages.");
+                    break; // leaves the switch, back to the menu
+                }
+            
+            
+
+            // NEW: for loop for the remaining messages
+            for (int i = entered; i <= maxMessages; i++) {
+                System.out.print("Enter recipient cell (e.g. +27831234567): ");
+                String Reciepentcell = input.nextLine();
+
+                System.out.print("Enter your message (max 250 characters): ");
+                String text = input.nextLine();
+
+                if (text.length() > 250) {
+                    System.out.println("Message exceeds 250 characters by "
+                            + (text.length() - 250) + ", please reduce size.");
+                    i--;
+                    continue;
+                }
+                
+          String messageID = "";
+          
+          String messagehash = "";
+          String printMessage = "";
+          String Totalmessage = "";
+          String messageNumber = "";
+        Message msg = new Message( messageID,Reciepentcell, messagehash,
+         printMessage, Totalmessage,messageNumber);
+                String cellCheck = msg.checkReciepentCell();
+                System.out.println(cellCheck);
+                if (!cellCheck.equals("Cell phone number successfully captured.")) {
+                    i--;
+                    continue;
+                }
+
+                System.out.println("1) Send  2) Disregard  3) Store");
+                int action = Integer.parseInt(input.nextLine());
+                System.out.println(msg.sentMessage());
+
+                if (action == 1 || action == 3) {
+                    System.out.println(msg.printMessage());
+                    entered++;
+                }
+            }
+            break;
+        case 2:
+            System.out.println("Coming Soon.");
+            break;
+        case 3:
+            System.out.println("Goodbye.");
+            input.close();
+            break;
+        default:
+            System.out.println("Invalid option, please choose 1, 2 or 3.");
+    }
+}
+    }
+    }
+
 
 
 // Refrence list

@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.partone;
-import java.util.ArrayList;
+
 import java.util.Random;
 /**
  *
@@ -16,7 +16,7 @@ public class Message {
     private String printMessage;
     private String Totalmessage;
     private String messageNumber;
-    
+
 public Message(String messageID,String Reciepentcell, String messagehash,
         String printMessage,String Totalmessage,String messageNumber){
         
@@ -31,7 +31,7 @@ public Message(String messageID,String Reciepentcell, String messagehash,
 
   public  String generateMessageID() {
   Random random = new Random();
-        String messageID = String.valueOf(1 + random.nextInt(9)); // first digit 1-9 so it is always 10 digits
+        String messageID = String.valueOf( 1+ random.nextInt(9)); // first digit 1-9 so it is always 10 digits
         for (int i = 1; i < 10; i++) {
             messageID = messageID + random.nextInt(10);
         }
@@ -52,6 +52,23 @@ public String checkReciepentCell(){
         return "Cell phone number has the incorrect number of numbers or does not contain international code";
     }
    
+}
+ public String createMessagehash(){
+      String firstTwo = messageID.substring(0, 2);
+        String trimmed = messageText.trim(); //removes spaces at the start and end
+        String[] words = trimmed.split("\\s+"); // splits the message into arrays
+        String firstWord = words[0];
+        String lastWord = words[words.length - 1];
+        return (firstTwo + ":" + messageNumber + ":" + firstWord + lastWord).toUpperCase();
+ }
+public String sentMessage(){
+    
+}
+public String printMessage(){
+    
+}
+public int returnTotalMessage(){
+    
 }
 }
 
