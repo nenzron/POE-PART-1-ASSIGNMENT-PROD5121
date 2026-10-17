@@ -16,12 +16,16 @@ public class Message {
     private String messagehash;
     private String printMessage;
     private String Totalmessage;
-    private String messageNumber;
+    private int messageNumber;
     private String Textmessage;
     private String sentMessage;
+    
+    //private Static String Totalmessage = 0;
+    //private static String printMessage = ""; 
+    // private Static String print
 
 public Message(String messageID,String Reciepentcell, String messagehash,
-        String printMessage,String Totalmessage,String messageNumber,String Textmessage
+        String printMessage,String Totalmessage,int messageNumber,String Textmessage
          ,String sentMessage){
         
         this.messageID = messageID; 
@@ -37,7 +41,7 @@ public Message(String messageID,String Reciepentcell, String messagehash,
 
   public  String generateMessageID() {
   Random random = new Random();
-        String messageID = String.valueOf( 1+ random.nextInt(9)); // first digit 1-9 so it is always 10 digits
+        messageID = String.valueOf( 1+ random.nextInt(9)); // first digit 1-9 so it is always 10 digits
         for (int i = 1; i < 10; i++) {
             messageID = messageID + random.nextInt(10);
         }
@@ -46,7 +50,7 @@ public Message(String messageID,String Reciepentcell, String messagehash,
  
     // Message ID must not be more than ten characters
     public boolean checkMessageID() {
-        return messageID.length() <= 10;
+        return messageID.length() == 10;
     }
 public String checkReciepentCell(){
     String regexPattern = "^(\\+27)[0-9]{1,10}$"; //(Stack Overflow, 2025),(NumberCrunch Programmers, 2024)
@@ -57,16 +61,49 @@ public String checkReciepentCell(){
        
         return "Cell phone number has the incorrect number of numbers or does not contain international code";
     }
-   
 }
+   public String checkmessagelenght(){
+   if (Textmessage.length() <=250) {
+     return  "Message is accepted.";
+   }else{
+       int over = Textmessage.length()-250;
+       return "Message is" +over+ "Character too long";
+       
+                 
+   }
+   }
  public String createMessagehash(){
       String firstTwo = messageID.substring(0, 2);
         String trimmed = Textmessage.trim(); //removes spaces at the start and end
-        String[] words = trimmed.split("\\s+"); // splits the message into arrays
-        String firstWord = words[0];
-        String lastWord = words[words.length - 1];
+        
+       
+        
+        
+        String firstWord ;
+        int firstSpace = trimmed.indexOf("");
+        if(firstSpace == -1){
+            firstWord = trimmed;
+        }else{
+            firstWord = trimmed.substring(0,firstSpace);
+        }
+       
+          
+        int lastSpace = trimmed.indexOf("");
+        String lastWord = trimmed.substring(+1);
+         
+        
         return (firstTwo + ":" + messageNumber + ":" + firstWord + lastWord).toUpperCase();
+        
+        
  }
+// System.out.println("1) Send  2) Disregard  3) Store");
+             //   int action = Integer.parseInt(input.nextLine());
+               // System.out.println(msg.sentMessage());
+//
+              //  if (action == 1 || action == 3) {
+                 //   System.out.println(msg.printMessage());
+                  //  entered++;
+            //    }
  
 public String sentMessage(){
         Scanner input = new Scanner(System.in);
@@ -74,26 +111,20 @@ public String sentMessage(){
         System.out.println("1) Send Message");
         System.out.println("2) Disregard Message");
         System.out.println("3) Store Message");
-        String choice = input.nextLine().trim();
+        int option = input.nextInt();
+        input.nextLine();
 
-        
-        switch (choice) {
-            case "1":
-                sentMessage.add(this);
-                Totalmessage++;
-                return "Message successfully sent";
-            case "2":
-                System.out.println("Press 0 to delete the message");
-                String confirm = input.nextLine().trim();
-                if (confirm.equals("0")) {
-                    return "Message disregarded";
-                }
-                return "Message not deleted";
-            case "3":
-                storeMessage();
-                return "Message successfully stored";
-            default:
-                return "Invalid option, message was not sent";
+        if(option==1){
+         
+         return "Message successfully sent";
+        }else if(option==2){
+            
+        return "Press 0 to delete the message";
+        }else if(option==3){
+            
+         return "Message successfully stored";
+        }else{
+            return "invalid option, please select 1,2 or 3";
         }
 
 }
@@ -101,6 +132,9 @@ public String printMessage(){
     
 }
 public int returnTotalMessage(){
+    
+}
+public String Storedmessage(){
     
 }
 }
