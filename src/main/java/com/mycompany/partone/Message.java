@@ -4,6 +4,8 @@
  */
 package com.mycompany.partone;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 /**
@@ -15,18 +17,19 @@ public class Message {
     private String Reciepentcell;
     private String messagehash;
     private String printMessage;
-    private String Totalmessage;
+    private int Totalmessage;
     private int messageNumber;
     private String Textmessage;
     private String sentMessage;
+    private String Status;
     
     //private Static String Totalmessage = 0;
     //private static String printMessage = ""; 
     // private Static String print
 
 public Message(String messageID,String Reciepentcell, String messagehash,
-        String printMessage,String Totalmessage,int messageNumber,String Textmessage
-         ,String sentMessage){
+        String printMessage,int Totalmessage,int messageNumber,String Textmessage
+         ,String sentMessage, String Status){
         
         this.messageID = messageID; 
         this.Reciepentcell =  Reciepentcell;
@@ -36,6 +39,7 @@ public Message(String messageID,String Reciepentcell, String messagehash,
         this.messageNumber = messageNumber;
         this.Textmessage = Textmessage;
         this.sentMessage = sentMessage;
+        this.Status = Status;
         
     }
 
@@ -52,7 +56,7 @@ public Message(String messageID,String Reciepentcell, String messagehash,
     public boolean checkMessageID() {
         return messageID.length() == 10;
     }
-public String checkReciepentCell(){
+public static String checkReciepentCell(String Reciepentcell){
     String regexPattern = "^(\\+27)[0-9]{1,10}$"; //(Stack Overflow, 2025),(NumberCrunch Programmers, 2024)
     
     if (Reciepentcell.matches(regexPattern)){//regex is a  JavaScript regular expression used to validate a standard 10-digit phone number format
@@ -62,7 +66,7 @@ public String checkReciepentCell(){
         return "Cell phone number has the incorrect number of numbers or does not contain international code";
     }
 }
-   public String checkmessagelenght(){
+   public static String checkmessagelenght(String Textmessage){
    if (Textmessage.length() <=250) {
      return  "Message is accepted.";
    }else{
@@ -92,7 +96,8 @@ public String checkReciepentCell(){
         String lastWord = trimmed.substring(+1);
          
         
-        return (firstTwo + ":" + messageNumber + ":" + firstWord + lastWord).toUpperCase();
+        String messagehash = firstTwo + ":" + messageNumber + ":" + firstWord + lastWord;
+        return messagehash.toUpperCase();
         
         
  }
@@ -116,25 +121,66 @@ public String sentMessage(){
 
         if(option==1){
          
+          Status = "Message sent";
          return "Message successfully sent";
+         
         }else if(option==2){
             
-        return "Press 0 to delete the message";
+        Status = "Message disregard";
+        return "Message disregarded";
+                    
         }else if(option==3){
             
+            storeMessage();
+            Status = "Messaged Stored";
          return "Message successfully stored";
+         
         }else{
             return "invalid option, please select 1,2 or 3";
         }
-
 }
+
+
+
+
 public String printMessage(){
     
+    if(sentMessage().equals("Message successfully sent")){
+        return details();
+        
+    }
+    return "Message not sent";
 }
-public int returnTotalMessage(){
     
-}
-public String Storedmessage(){
+
+public void storeMessage() {
+         String safeMessage = Textmessage.replace("\\", "\\\\").replace("\"", "\\\"");
+    String json = "{\"messageID\":\"" + messageID + "\","
+            + "\"messageHash\":\"" + messagehash + "\","
+            + "\"recipient\":\"" + Reciepentcell + "\","
+            + "\"message\":\"" + safeMessage + "\"}";
+    try {
+        FileWriter writer = new FileWriter("storedMessages.json", true); // true = append
+        writer.write(json + "\n");
+        writer.close();
+    } catch (IOException e) {
+        System.out.println("Could not store the message.");
+    }
+    }
+
+    // Details in the required order: Message ID, Message Hash, Recipient, Message
+    public String details() {
+        return "Message ID: " + messageID+
+                "\nMessage Hash: " + messagehash +
+                 "\nRecipient: " + Reciepentcell + 
+                 "\nMessage: " + Textmessage;
+    }
+
+    public String getMessageID() { 
+        return messageID; 
+    }
+    public String getMessageHash() {
+        return messagehash; 
     
 }
 }

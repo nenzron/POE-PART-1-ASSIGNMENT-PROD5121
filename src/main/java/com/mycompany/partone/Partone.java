@@ -24,7 +24,7 @@ public class Partone {
         System.out.println("Please enter your last name");
         String lastname = input.nextLine();
        
-         System.out.println("Please enter your username,(must contain '_' and be no more than 5 charachter)");
+        System.out.println("Please enter your username,(must contain '_' and be no more than 5 charachter)");
          String username = input.nextLine();
         
         System.out.println("Please enter your password,"
@@ -65,24 +65,27 @@ public class Partone {
             Partone old = new Partone();
             old.runQuickChat();
         }
-  }
+
+  //}
+  
 
     // QuickChat menu and message loop (Part 2)
-    public  void runQuickChat() {
-        Scanner input = new Scanner(System.in);
+  //  public  void runQuickChat() {
+      //  Scanner input = new Scanner(System.in);
     
         System.out.println("Welcome to QuickChat.");
         
-    System.out.print("How many messages do you wish to enter? ");
+    System.out.print("How many messages do you wish to send? ");
     int maxMessages = Integer.parseInt(input.nextLine());
     int entered = 0;
+    int Nummessagesent = 0;
 
         
     
          int choice = 0;
     while (choice != 3) { //keep repeating the code in the braces as long as choice is not 3
         System.out.println("\n1) Send Messages");
-        System.out.println("2) Show recently sent messages");
+        System.out.println("2) Show recently sent messages,Dislamer:coming soon!");
         System.out.println("3) Quit");
         System.out.print("Choose an option: ");
 
@@ -95,6 +98,7 @@ public class Partone {
 
             // NEW: only allow the set number of messages
              if (entered >= maxMessages) {
+                 
                     System.out.println("You have already entered all " + maxMessages + " messages.");
                     break; // leaves the switch, back to the menu
                 }
@@ -103,20 +107,26 @@ public class Partone {
 
             // NEW: for loop for the remaining messages
             for (int i = entered; i <= maxMessages; i++) {
+           
+    
+                Nummessagesent = Nummessagesent + 1;
+                
+                System.out.println("\n The number of messages sent is:" + Nummessagesent);
+                System.out.println("------------------------------");
+                
                 System.out.print("Enter recipient cell (e.g. +27831234567): ");
                 String Reciepentcell = input.nextLine();
-
-                System.out.print("Enter your message (max 250 characters): ");
-                String text = input.nextLine();
-
-                if (text.length() > 250) {
-                    System.out.println("Message exceeds 250 characters by "
-                            + (text.length() - 250) + ", please reduce size.");
-                    i--;
-                    continue;
-                }
+                String Reciepentcellresult = Message.checkReciepentCell(Reciepentcell);
                 
-          String messageID = "";
+
+                System.out.print("Enter your message (max of 250 characters): ");
+                String Textmessage = input.nextLine();
+                String Textmessageresult = Message.checkmessagelenght(Textmessage);
+                
+
+            }
+                
+        /*  String messageID = "";
           
           String messagehash = "";
           String printMessage = "";
@@ -139,11 +149,11 @@ public class Partone {
                 if (action == 1 || action == 3) {
                     System.out.println(msg.printMessage());
                     entered++;
-                }
-            }
+                }*/
+            
             break;
         case 2:
-            System.out.println("Coming Soon.");
+            System.out.println("Under Construction.");
             break;
         case 3:
             System.out.println("Goodbye.");
@@ -152,9 +162,11 @@ public class Partone {
         default:
             System.out.println("Invalid option, please choose 1, 2 or 3.");
     }
+    System.out.println("");
 }
     }
-    }
+}
+   
 
 
 
