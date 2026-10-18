@@ -24,7 +24,7 @@ public class Partone {
         System.out.println("Please enter your last name");
         String lastname = input.nextLine();
        
-     /*   System.out.println("Please enter your username,(must contain '_' and be no more than 5 charachter)");
+        System.out.println("Please enter your username,(must contain '_' and be no more than 5 charachter)");
          String username = input.nextLine();
         
         System.out.println("Please enter your password,"
@@ -64,14 +64,14 @@ public class Partone {
         if (loginStatus.equals("Login details are correct")) {
             Partone old = new Partone();
             old.runQuickChat();
-        } */
+        } 
 
-  //}
+  }
   
 
     // QuickChat menu and message loop (Part 2)
-  //  public  void runQuickChat() {
-      //  Scanner input = new Scanner(System.in);
+     public  void runQuickChat() {
+        Scanner input = new Scanner(System.in);
     // Welcome message
 System.out.println("Welcome to QuickChat.");
 
