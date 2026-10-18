@@ -191,7 +191,7 @@ while (option == true) {
 
 
 
-// Refrence list
+// Refrence list Part one
 
 //YouTube. (2025). MOhiM2SXZl0 [online video]. Available at: https://www.youtube.com/watch?v=MOhiM2SXZl0 [Accessed 15 September 2026]
 //Stack Overflow, 2025. Regex pattern for South African cellphone validation. [computer program/code]. Available at: https://stackoverflow.com/... [Accessed 15 September 2026].
@@ -199,6 +199,15 @@ while (option == true) {
 // Farrell, J., 2022. Java programming. 10th ed. Boston: Cengage Learning.
 //NumberCrunch Programmers. (2024). Java program to validate South African phone numbers using RegeX [online video]. Available at: https://www.youtube.com/watch?v=2M1CpEJZ6rk [Accessed 17 September 2026].
 
-    
+// Refrence list Part two
+//Bray, T. ed., 2017. The JavaScript Object Notation (JSON) data interchange format (RFC 8259). [online] Available at: https://www.rfc-editor.org/rfc/rfc8259 [Accessed 18 October 2026].
+
+//JUnit, [s.a.]. JUnit 5 user guide. [online] Available at: https://junit.org/junit5/docs/current/user-guide/ [Accessed 18 October 2026].
+
+//Oracle, [s.a.]. Lesson: regular expressions. The Java tutorials. [online] Available at: https://docs.oracle.com/javase/tutorial/essential/regex/index.html [Accessed 18 October 2026].
+
+//Oracle, 2024a. FileWriter (Java Platform SE 8). [online] Available at: https://docs.oracle.com/javase/8/docs/api/java/io/FileWriter.html [Accessed 18 October 2026].
+
+//Oracle, 2024b. String (Java Platform SE 8). [online] Available at: https://docs.oracle.com/javase/8/docs/api/java/lang/String.html [Accessed 18 October 2026].
 
 

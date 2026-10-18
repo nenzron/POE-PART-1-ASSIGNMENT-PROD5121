@@ -62,7 +62,7 @@ public boolean checkMessageID() {
 public static String checkReciepentCell(String Reciepentcell) {
     String regexPattern = "^(\\+27)[0-9]{9}$";
 
-    if (Reciepentcell.matches(regexPattern)) {
+    if (Reciepentcell.matches(regexPattern)) { //	(Oracle, [s.a.])
         return "Cell phone number successfully captured.";
     } else {
         return "Cell phone number is incorrectly formatted or does not contain an international code. "
@@ -88,7 +88,7 @@ public static int incrementmessageNumber(int messageNumber) {
 }
 
 // Builds the hash: first 2 digits of ID : message number : FIRSTWORDLASTWORD
-public String createMessagehash() {
+public String createMessagehash() { //(Oracle, 2024b)
     String firstTwo = messageID.substring(0, 2);
     String trimmed = Textmessage.trim();   // removes spaces at the start and end
 
@@ -158,14 +158,14 @@ public static int returnTotalMessages() {
 }
 
 // Saves the message in storedMessages.json (one JSON object per line)
-public void storeMessage() {
+public void storeMessage() { //(Bray, 2017; Oracle, 2024a)
     // Escape slashes and quotes so they don't break the JSON
-    String safeMessage = Textmessage.replace("\\", "\\\\").replace("\"", "\\\"");
+    String safeMessage = Textmessage.replace("\\", "\\\\").replace("\"", "\\\""); //(Bray, 2017; Oracle, 2024b)
     String json = "{\"messageID\":\"" + messageID + "\","
             + "\"messageHash\":\"" + messagehash + "\","
             + "\"recipient\":\"" + Reciepentcell + "\","
             + "\"message\":\"" + safeMessage + "\"}";
-    try {
+    try {  //(Oracle, 2024a)
         FileWriter writer = new FileWriter("storedMessages.json", true); // true = add to the end
         writer.write(json + "\n");
         writer.close();

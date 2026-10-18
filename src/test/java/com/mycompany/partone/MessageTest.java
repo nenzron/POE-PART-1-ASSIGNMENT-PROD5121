@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 
-public class MessageTest {
+public class MessageTest { //(JUnit, [s.a.])
 
     // Put the keyboard back to normal after each test
     private final InputStream originalIn = System.in;
