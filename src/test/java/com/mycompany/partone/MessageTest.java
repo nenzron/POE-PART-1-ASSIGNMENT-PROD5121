@@ -30,11 +30,7 @@ public class MessageTest { //(JUnit, [s.a.])
     }
 
     // ---------- Test Data: Task 1 ----------
-    // Num Messages: 2
-    // Recipient Number: +27718693002
-    // Message: "Hi Mike, can you join us for dinner tonight?"
-    // SendMessage: Select Send
-    // Num sent messages, Message Hash, MessageID, Return total: auto generated
+    
 
     @Test
     public void testTask1() {
@@ -73,10 +69,7 @@ public class MessageTest { //(JUnit, [s.a.])
         assertEquals(2, numMessages);
     }
      // ---------- Test Data for Message 2 ----------
-    // Recipient Number: 08575975889 (no international code)
-    // Message: "Hi Keegan, did you receive the payment?"
-    // SendMessage: Select Discard
-    // Num sent messages, Message Hash, MessageID, Return total: auto generated
+
 
     @Test
     public void testMessage2() {

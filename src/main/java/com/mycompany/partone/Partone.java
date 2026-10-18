@@ -75,7 +75,9 @@ public class Partone {
     // Welcome message
 System.out.println("Welcome to QuickChat.");
 
+
 // Ask how many messages the user wants to enter
+System.out.println("\n------------------------------");
 System.out.print("How many messages do you wish to send? ");
 int maxMessages = Integer.parseInt(input.nextLine());
 
@@ -116,6 +118,7 @@ while (option == true) {
                     System.out.print("Enter recipient cell (e.g. +27831234567): ");
                     String Reciepentcell = input.nextLine();
                     String Reciepentcellresult = Message.checkReciepentCell(Reciepentcell);
+                    
                     while (!Reciepentcellresult.equals("Cell phone number successfully captured.")) {
                         System.out.println(Reciepentcellresult);
                         System.out.print("Please enter recipient cell again: ");
@@ -128,6 +131,7 @@ while (option == true) {
                     System.out.print("Please enter your message (max of 250 characters): ");
                     String Textmessage = input.nextLine();
                     String Textmessageresult = Message.checkmessagelenght(Textmessage);
+                    
                     while (!Textmessageresult.equals("Message is ready to send.")) {
                         System.out.println(Textmessageresult);
                         System.out.print("Please enter your message again(Max 250 Characters): ");
