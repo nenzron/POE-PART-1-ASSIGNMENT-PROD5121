@@ -93,6 +93,8 @@ while (option == true) {
     System.out.println("3) Quit");
     System.out.print("Choose an option: ");
 
+    
+    
     int choice = Integer.parseInt(input.nextLine());
 
     switch (choice) {
