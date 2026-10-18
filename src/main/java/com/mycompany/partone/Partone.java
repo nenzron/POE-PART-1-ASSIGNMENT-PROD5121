@@ -24,7 +24,7 @@ public class Partone {
         System.out.println("Please enter your last name");
         String lastname = input.nextLine();
        
-        System.out.println("Please enter your username,(must contain '_' and be no more than 5 charachter)");
+     /*   System.out.println("Please enter your username,(must contain '_' and be no more than 5 charachter)");
          String username = input.nextLine();
         
         System.out.println("Please enter your password,"
@@ -64,7 +64,7 @@ public class Partone {
         if (loginStatus.equals("Login details are correct")) {
             Partone old = new Partone();
             old.runQuickChat();
-        }
+        } */
 
   //}
   
@@ -72,102 +72,124 @@ public class Partone {
     // QuickChat menu and message loop (Part 2)
   //  public  void runQuickChat() {
       //  Scanner input = new Scanner(System.in);
-    
-        System.out.println("Welcome to QuickChat.");
-        
-    System.out.print("How many messages do you wish to send? ");
-    int maxMessages = Integer.parseInt(input.nextLine());
-    int entered = 0;
-    int Nummessagesent = 0;
+    // Welcome message
+System.out.println("Welcome to QuickChat.");
 
-        
-    
-         int choice = 0;
-    while (choice != 3) { //keep repeating the code in the braces as long as choice is not 3
-        System.out.println("\n1) Send Messages");
-        System.out.println("2) Show recently sent messages,Dislamer:coming soon!");
-        System.out.println("3) Quit");
-        System.out.print("Choose an option: ");
+// Ask how many messages the user wants to enter
+System.out.print("How many messages do you wish to send? ");
+int maxMessages = Integer.parseInt(input.nextLine());
 
-        choice = Integer.parseInt(input.nextLine());
+// Counts how many messages have been entered so far
+int entered = 0;
 
-         switch (choice) {
-        case 1:
-            // your send messages code goes here
-            System.out.println("Send Messages selected");
+// The menu keeps showing until the user chooses 3 (Quit)
+boolean option = true;
 
-            // NEW: only allow the set number of messages
-             if (entered >= maxMessages) {
-                 
-                    System.out.println("You have already entered all " + maxMessages + " messages.");
-                    break; // leaves the switch, back to the menu
+while (option == true) {
+    System.out.println("\n1) Send Messages");
+    System.out.println("2) Show recently sent messages, Disclaimer: coming soon!");
+    System.out.println("3) Quit");
+    System.out.print("Choose an option: ");
+
+    int choice = Integer.parseInt(input.nextLine());
+
+    switch (choice) {
+
+        // Option 1: send messages
+        case 1 -> {
+
+            // Stop the user from entering more than the number they chose
+            if (entered >= maxMessages) {
+                System.out.println("You have already entered all " + maxMessages + " messages.");
+            } else {
+
+                // Repeat once for each message that is left to enter
+                for (int i = entered; i < maxMessages; i++) {
+
+                    // Message number for the screen (starts at 1 instead of 0)
+                    int messageNumber = Message.incrementmessageNumber(i);
+
+                    System.out.println("\n------------------------------");
+                    System.out.println("Message number: " + messageNumber);
+
+                    // Ask for the recipient until the number is correct
+                    System.out.print("Enter recipient cell (e.g. +27831234567): ");
+                    String Reciepentcell = input.nextLine();
+                    String Reciepentcellresult = Message.checkReciepentCell(Reciepentcell);
+                    while (!Reciepentcellresult.equals("Cell phone number successfully captured.")) {
+                        System.out.println(Reciepentcellresult);
+                        System.out.print("Please enter recipient cell again: ");
+                        Reciepentcell = input.nextLine();
+                        Reciepentcellresult = Message.checkReciepentCell(Reciepentcell);
+                    }
+                    System.out.println(Reciepentcellresult);
+
+                    // Ask for the message until it is 250 characters or less
+                    System.out.print("Please enter your message (max of 250 characters): ");
+                    String Textmessage = input.nextLine();
+                    String Textmessageresult = Message.checkmessagelenght(Textmessage);
+                    while (!Textmessageresult.equals("Message is ready to send.")) {
+                        System.out.println(Textmessageresult);
+                        System.out.print("Please enter your message again(Max 250 Characters): ");
+                        Textmessage = input.nextLine();
+                        Textmessageresult = Message.checkmessagelenght(Textmessage);
+                    }
+                    System.out.println(Textmessageresult);
+
+                    // Create the message, then give it an ID and a hash
+                   Message msg = new Message("", Reciepentcell, "", "",
+        Message.returnTotalMessages(), messageNumber, Textmessage, "", "");
+                    msg.generateMessageID();
+                    msg.createMessagehash();
+
+                    // Ask the user to send, disregard or store the message
+                    String result = msg.sentMessage();
+                    System.out.println(result);
+
+                    if (result.equals("Message successfully sent")) {
+                        // Show the full details and the running total
+                        System.out.println("\n------------------------------");
+                        System.out.println("\n" + msg.details());
+                        System.out.println("The number of messages sent is: " + Message.returnTotalMessages());
+                        entered++;
+                    } else if (result.equals("Message successfully stored")) {
+                        entered++;
+                    } else if (result.equals("Message disregarded")) {
+                        entered++;   // deleted message still uses up one of the messages
+                    } else {
+                        i--;         // wrong option, so ask for this message again
+                    }
                 }
-            
-            
 
-            // NEW: for loop for the remaining messages
-            for (int i = entered; i <= maxMessages; i++) {
-           
-    
-                Nummessagesent = Nummessagesent + 1;
-                
-                System.out.println("\n The number of messages sent is:" + Nummessagesent);
-                System.out.println("------------------------------");
-                
-                System.out.print("Enter recipient cell (e.g. +27831234567): ");
-                String Reciepentcell = input.nextLine();
-                String Reciepentcellresult = Message.checkReciepentCell(Reciepentcell);
-                
-
-                System.out.print("Enter your message (max of 250 characters): ");
-                String Textmessage = input.nextLine();
-                String Textmessageresult = Message.checkmessagelenght(Textmessage);
-                
-
+                // Show the total once all the messages have been entered
+            System.out.println("\n------------------------------");
+            System.out.println("All messages sent:\n");
+            System.out.println(Message.printMessages());
+            System.out.println("Total number of messages sent: " + Message.returnTotalMessages());
+            System.out.println("All messages entered. Choose 3 to quit.");
             }
-                
-        /*  String messageID = "";
-          
-          String messagehash = "";
-          String printMessage = "";
-          String Totalmessage = "";
-          String messageNumber = "";
-          String Textmessage = "";
-        Message msg = new Message( messageID,Reciepentcell, messagehash,
-         printMessage, Totalmessage,messageNumber,Textmessage);
-                String cellCheck = msg.checkReciepentCell();
-                System.out.println(cellCheck);
-                if (!cellCheck.equals("Cell phone number successfully captured.")) {
-                    i--;
-                    continue;
-                }
+        }
 
-                System.out.println("1) Send  2) Disregard  3) Store");
-                int action = Integer.parseInt(input.nextLine());
-                System.out.println(msg.sentMessage());
+        // Option 2: not finished yet
+        case 2 -> System.out.println("Coming Soon.");
 
-                if (action == 1 || action == 3) {
-                    System.out.println(msg.printMessage());
-                    entered++;
-                }*/
-            
-            break;
-        case 2:
-            System.out.println("Under Construction.");
-            break;
-        case 3:
+        // Option 3: quit the program
+        case 3 -> {
+            option = false;
             System.out.println("Goodbye.");
             input.close();
-            break;
-        default:
-            System.out.println("Invalid option, please choose 1, 2 or 3.");
-    }
-    System.out.println("");
-}
-    }
-}
-   
+        }
 
+        // Anything else is not a valid menu choice
+        default -> System.out.println("Invalid option, please choose 1, 2 or 3.");
+    }
+}
+    }
+}
+
+   
+// fix loop
+//fix message number
 
 
 // Refrence list
