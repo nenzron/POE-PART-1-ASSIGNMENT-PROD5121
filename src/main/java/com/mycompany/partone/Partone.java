@@ -146,7 +146,7 @@ while (option == true) {
                     String result = msg.sentMessage();
                     System.out.println(result);
 
-                    if (result.equals("Message successfully sent")) {
+                    if (result.equals("Message successfully sent.")) {
                         // Show the full details and the running total
                         System.out.println("\n------------------------------");
                         System.out.println("\n" + msg.details());
@@ -154,7 +154,7 @@ while (option == true) {
                         entered++;
                     } else if (result.equals("Message successfully stored")) {
                         entered++;
-                    } else if (result.equals("Message disregarded")) {
+                    } else if (result.equals("Press 0 to delete the message.")) {
                         entered++;   // deleted message still uses up one of the messages
                     } else {
                         i--;         // wrong option, so ask for this message again
@@ -188,8 +188,7 @@ while (option == true) {
 }
 
    
-// fix loop
-//fix message number
+
 
 
 // Refrence list
