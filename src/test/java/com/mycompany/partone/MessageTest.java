@@ -3,23 +3,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
  */
 package com.mycompany.partone;
- 
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import static org.junit.jupiter.api.Assertions.*;
 
-
-/**
- *
- * @author fhumu
- */
-
-
-
-public class MessageTest { //(JUnit, [s.a.])
+// Unit tests written with JUnit 5 (JUnit, [s.a.])
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class MessageTest {
 
     // Put the keyboard back to normal after each test
     private final InputStream originalIn = System.in;
@@ -29,50 +25,60 @@ public class MessageTest { //(JUnit, [s.a.])
         System.setIn(originalIn);
     }
 
-    // ---------- Test Data: Task 1 ----------
-    
+    // Prints a heading so each test is easy to find in the Output window
+    private void heading(String title) {
+        System.out.println("\n===== " + title + " =====");
+    }
 
+    // ---------- Test Data: Task 1 ----------
     @Test
+    @Order(1)
     public void testTask1() {
-        int numMessages = 2;
+        heading("TEST DATA TASK 1 (Send)");
         String recipient = "+27718693002";
         String text = "Hi Mike, can you join us for dinner tonight?";
 
         // Message number starts at 0, so the first message is number 0
         Message msg = new Message("", recipient, "", "", 0, 0, text, "", "");
 
-        // Recipient number is correct
         assertEquals("Cell phone number successfully captured.",
                 Message.checkReciepentCell(recipient));
+        System.out.println("Recipient check: PASSED (" + recipient + ")");
 
-        // Message is not more than 250 characters
         assertEquals("Message is ready to send.", Message.checkmessagelenght(text));
+        System.out.println("Message length check: PASSED");
 
         // MessageID is auto generated (10 digits)
         String id = msg.generateMessageID();
         assertTrue(msg.checkMessageID());
         assertEquals(10, id.length());
+        System.out.println("Message ID: " + id);
 
-        // Message hash is auto generated: first 2 digits of ID : message number : FIRSTLAST
-        String expectedHash = id.substring(0, 2) + ":0:HITONIGHT";
-        assertEquals(expectedHash, msg.createMessagehash());
+        // Message hash is auto generated
+        String hash = msg.createMessagehash();
+        assertEquals(id.substring(0, 2) + ":0:HITONIGHT", hash);
+        System.out.println("Message Hash: " + hash);
 
         // User selects Send (types 1)
         int totalBefore = Message.returnTotalMessages();
         System.setIn(new ByteArrayInputStream("1\n".getBytes()));
-        assertEquals("Message successfully sent.", msg.sentMessage());
+        String result = msg.sentMessage();
+        assertEquals("Message successfully sent.", result);
+        System.out.println("SendMessage result: " + result);
 
         // Return total number sent goes up by 1
         assertEquals(totalBefore + 1, Message.returnTotalMessages());
+        System.out.println("Return total number sent: " + Message.returnTotalMessages());
 
-        // The number of messages the user said they would send
-        assertEquals(2, numMessages);
+        // All the details in the required order
+        System.out.println(msg.details());
     }
-     // ---------- Test Data for Message 2 ----------
 
-
+    // ---------- Test Data for Message 2 ----------
     @Test
+    @Order(2)
     public void testMessage2() {
+        heading("TEST DATA MESSAGE 2 (Discard)");
         String recipient = "08575975889";
         String text = "Hi Keegan, did you receive the payment?";
 
@@ -80,77 +86,100 @@ public class MessageTest { //(JUnit, [s.a.])
         Message msg = new Message("", recipient, "", "", 0, 1, text, "", "");
 
         // Recipient number has no international code, so it must fail
+        String cellResult = Message.checkReciepentCell(recipient);
         assertEquals("Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.",
-                Message.checkReciepentCell(recipient));
+                cellResult);
+        System.out.println("Recipient check: " + cellResult);
 
-        // Message is not more than 250 characters
         assertEquals("Message is ready to send.", Message.checkmessagelenght(text));
+        System.out.println("Message length check: PASSED");
 
         // MessageID is auto generated (10 digits)
         String id = msg.generateMessageID();
         assertTrue(msg.checkMessageID());
         assertEquals(10, id.length());
+        System.out.println("Message ID: " + id);
 
-        // Message hash is auto generated: first 2 digits of ID : message number : FIRSTLAST
-        String expectedHash = id.substring(0, 2) + ":1:HIPAYMENT";
-        assertEquals(expectedHash, msg.createMessagehash());
+        // Message hash is auto generated
+        String hash = msg.createMessagehash();
+        assertEquals(id.substring(0, 2) + ":1:HIPAYMENT", hash);
+        System.out.println("Message Hash: " + hash);
 
         // User selects Discard (types 2)
         int totalBefore = Message.returnTotalMessages();
         System.setIn(new ByteArrayInputStream("2\n".getBytes()));
-        assertEquals("Press 0 to delete the message.", msg.sentMessage());
+        String result = msg.sentMessage();
+        assertEquals("Press 0 to delete the message.", result);
+        System.out.println("SendMessage result: " + result);
 
-        // Return total number sent does not change for a discarded message
+        // The total does not change for a discarded message
         assertEquals(totalBefore, Message.returnTotalMessages());
-    }
-        // ---------- Test AssertEquals: message should not be more than 250 characters ----------
+        System.out.println("Return total number sent: " + Message.returnTotalMessages());
 
-    // Success: message is 250 characters or less
+        System.out.println(msg.details());
+    }
+
+    // ---------- Message should not be more than 250 characters ----------
     @Test
+    @Order(3)
     public void testMessageLengthSuccess() {
+        heading("MESSAGE LENGTH: SUCCESS");
         String text = "Hi Mike, can you join us for dinner tonight?";
-        assertEquals("Message is ready to send.", Message.checkmessagelenght(text));
+        String result = Message.checkmessagelenght(text);
+        assertEquals("Message is ready to send.", result);
+        System.out.println("Message length " + text.length() + " -> " + result);
     }
 
-    // Failure: message is more than 250 characters
     @Test
+    @Order(4)
     public void testMessageLengthFailure() {
+        heading("MESSAGE LENGTH: FAILURE");
         String longMessage = "a".repeat(260);   // 10 characters over the limit
         int over = longMessage.length() - 250;  // X = 10
 
-        assertEquals("Message exceeds 250 characters by " + over + "; please reduce the size.",
-                Message.checkmessagelenght(longMessage));
+        String result = Message.checkmessagelenght(longMessage);
+        assertEquals("Message exceeds 250 characters by " + over + "; please reduce the size.", result);
+        System.out.println("Message length " + longMessage.length() + " -> " + result);
     }
+
     // ---------- The recipient number is correctly formatted ----------
-
-    // Success: +27 followed by 9 digits (Task 1 number)
     @Test
+    @Order(5)
     public void testRecipientSuccess() {
-        assertEquals("Cell phone number successfully captured.",
-                Message.checkReciepentCell("+27718693002"));
+        heading("RECIPIENT: SUCCESS");
+        String result = Message.checkReciepentCell("+27718693002");
+        assertEquals("Cell phone number successfully captured.", result);
+        System.out.println("+27718693002 -> " + result);
     }
 
-    // Failure: no international code (Message 2 number)
     @Test
+    @Order(6)
     public void testRecipientFailure() {
+        heading("RECIPIENT: FAILURE");
+        String result = Message.checkReciepentCell("08575975889");
         assertEquals("Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.",
-                Message.checkReciepentCell("08575975889"));
+                result);
+        System.out.println("08575975889 -> " + result);
     }
-        // ---------- Message hash is correct ----------
 
-    // Test Case 1: the hash must be 00:0:HITONIGHT
+    // ---------- Message hash is correct ----------
     @Test
+    @Order(7)
     public void testMessageHashTestCase1() {
+        heading("MESSAGE HASH: TEST CASE 1");
         // The ID is set to start with 00 so the expected hash is always the same
         Message msg = new Message("0012345678", "+27718693002", "", "",
                 0, 0, "Hi Mike, can you join us for dinner tonight?", "", "");
 
-        assertEquals("00:0:HITONIGHT", msg.createMessagehash());
+        String hash = msg.createMessagehash();
+        assertEquals("00:0:HITONIGHT", hash);
+        System.out.println("Message Hash: " + hash);
     }
 
-    // The remainder of the message hashes, tested in a loop
     @Test
+    @Order(8)
     public void testMessageHashLoop() {
+        heading("MESSAGE HASH: LOOP");
         for (int number = 0; number < 2; number++) {
 
             String id;
@@ -170,61 +199,72 @@ public class MessageTest { //(JUnit, [s.a.])
             Message msg = new Message(id, "+27718693002", "", "",
                     0, number, text, "", "");
 
-            assertEquals(expected, msg.createMessagehash());
+            String hash = msg.createMessagehash();
+            assertEquals(expected, hash);
+            System.out.println("Message " + number + " hash: " + hash);
         }
     }
-        // ---------- Message ID is created ----------
 
+    // ---------- Message ID is created ----------
     @Test
+    @Order(9)
     public void testMessageIDCreated() {
+        heading("MESSAGE ID IS CREATED");
         Message msg = new Message("", "+27718693002", "", "",
                 0, 0, "Hi Mike, can you join us for dinner tonight?", "", "");
 
-        // Create the ID, then build the text the system should show
         String id = msg.generateMessageID();
         String output = "Message ID generated: " + id;
 
-        // The ID is 10 digits and passes the ID check
         assertTrue(msg.checkMessageID());
         assertEquals(10, id.length());
         assertTrue(id.matches("[0-9]{10}"));
-
-        // The text is "Message ID generated: <Message ID>"
         assertTrue(output.startsWith("Message ID generated: "));
         assertEquals(32, output.length());   // 22 characters of text + 10 digits
+        System.out.println(output);
     }
-        // ---------- MessageSent ----------
 
-    // 1) User selected 'Send Message'
+    // ---------- MessageSent ----------
     @Test
+    @Order(10)
     public void testMessageSentSend() {
+        heading("MESSAGE SENT: 1) SEND");
         Message msg = new Message("0012345678", "+27718693002", "00:0:HITONIGHT", "",
                 0, 0, "Hi Mike, can you join us for dinner tonight?", "", "");
 
         System.setIn(new ByteArrayInputStream("1\n".getBytes()));
-        assertEquals("Message successfully sent.", msg.sentMessage());
+        String result = msg.sentMessage();
+        assertEquals("Message successfully sent.", result);
+        System.out.println("Result: " + result);
     }
 
-    // 2) User selected 'Disregard Message'
     @Test
+    @Order(11)
     public void testMessageSentDisregard() {
+        heading("MESSAGE SENT: 2) DISREGARD");
         Message msg = new Message("0112345678", "08575975889", "01:1:HIPAYMENT", "",
                 0, 1, "Hi Keegan, did you receive the payment?", "", "");
 
         System.setIn(new ByteArrayInputStream("2\n".getBytes()));
-        assertEquals("Press 0 to delete the message.", msg.sentMessage());
+        String result = msg.sentMessage();
+        assertEquals("Press 0 to delete the message.", result);
+        System.out.println("Result: " + result);
     }
 
-    // 3) User selected 'Store Message'
     @Test
+    @Order(12)
     public void testMessageSentStore() {
+        heading("MESSAGE SENT: 3) STORE");
         Message msg = new Message("0012345678", "+27718693002", "00:0:HITONIGHT", "",
                 0, 0, "Hi Mike, can you join us for dinner tonight?", "", "");
 
         System.setIn(new ByteArrayInputStream("3\n".getBytes()));
-        assertEquals("Message successfully stored.", msg.sentMessage());
+        String result = msg.sentMessage();
+        assertEquals("Message successfully stored.", result);
+        System.out.println("Result: " + result);
     }
-    
 }
+    
+
     
 

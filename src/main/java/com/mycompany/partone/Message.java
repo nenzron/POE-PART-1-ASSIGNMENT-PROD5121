@@ -35,7 +35,7 @@ public Message(String messageID,String Reciepentcell, String messagehash,
         this.Reciepentcell =  Reciepentcell;
         this.messagehash = messagehash;
         this.printMessage = printMessage;
-        this.Totalmessage = Totalmessage;
+        Message.Totalmessage = Totalmessage;
         this.messageNumber = messageNumber;
         this.Textmessage = Textmessage;
         this.sentMessage = sentMessage;
