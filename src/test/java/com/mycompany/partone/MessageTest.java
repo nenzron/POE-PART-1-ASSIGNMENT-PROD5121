@@ -260,7 +260,7 @@ public class MessageTest {
 
         System.setIn(new ByteArrayInputStream("3\n".getBytes()));
         String result = msg.sentMessage();
-        assertEquals("Message successfully stored.", result);
+        assertEquals("Message successfully stored", result);
         System.out.println("Result: " + result);
     }
 }

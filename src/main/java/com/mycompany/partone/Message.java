@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.partone;
-
+import java.io.File;
+import java.nio.file.Files;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
@@ -46,12 +47,21 @@ public Message(String messageID,String Reciepentcell, String messagehash,
   // Makes a random 10 digit message ID (first digit is never 0)
 public String generateMessageID() {
     Random random = new Random();
+    // One random number from 1000000000 to 9999999999, so it always has 10 digits
+    long number = random.nextLong(1000000000L, 10000000000L);
+    // String.valueOf turns the number into text (Oracle, 2024b)
+    messageID = String.valueOf(number);
+    return messageID;
+}
+
+/*public String generateMessageID() {
+    Random random = new Random();
     messageID = String.valueOf(1 + random.nextInt(9));
     for (int i = 1; i < 10; i++) {
         messageID = messageID + random.nextInt(10);
     }
     return messageID;
-}
+}*/
 
 // Checks that the message ID is 10 characters long
 public boolean checkMessageID() {
@@ -135,7 +145,7 @@ public String sentMessage() {
     } else if (option == 3) {
         storeMessage();
         Status = "Messaged Stored";
-        return "Message successfully stored.";
+        return "Message successfully stored";
 
     } else {
         return "invalid option, please select 1,2 or 3";
@@ -156,9 +166,49 @@ public static String printMessages() {
 public static int returnTotalMessages() {
     return Totalmessage;
 }
-
-// Saves the message in storedMessages.json (one JSON object per line)
+// METHOD FOR FIXING FEEDBACK
 public void storeMessage() { //(Bray, 2017; Oracle, 2024a)
+    System.out.println("storeMessage was called");
+
+    // Escape slashes and quotes so they don't break the JSON
+    String safeMessage = Textmessage.replace("\\", "\\\\").replace("\"", "\\\""); //(Bray, 2017; Oracle, 2024b)
+    String json = "{\"messageID\":\"" + messageID + "\","
+            + "\"messageHash\":\"" + messagehash + "\","
+            + "\"recipient\":\"" + Reciepentcell + "\","
+            + "\"message\":\"" + safeMessage + "\"}";
+
+    try {  //(Oracle, 2024a)
+        // Read what is already in the file (if it exists)
+        File file = new File("storedMessages.json");
+        System.out.println("Saving to: " + file.getAbsolutePath());
+
+        String content = "";
+        if (file.exists()) {
+            content = new String(Files.readAllBytes(file.toPath())).trim();
+        }
+
+        // Build the full array text
+        int end = content.lastIndexOf("]");
+
+        if (content.isEmpty() || content.equals("[]")) {
+            content = "[\n" + json + "\n]";   // first message: start the array
+        } else if (end == -1) {
+            // old format (objects line by line, no brackets): convert it to an array
+            content = "[\n" + content.replace("\r", "").replace("\n", ",\n") + ",\n" + json + "\n]";
+        } else {
+            // cut off the last ], add a comma, the new object, then close with ]
+            content = content.substring(0, end).trim() + ",\n" + json + "\n]";
+        }
+
+        FileWriter writer = new FileWriter("storedMessages.json"); // no "true": overwrite with the full array
+        writer.write(content);
+        writer.close();
+    } catch (IOException e) {
+        System.out.println("Could not store the message: " + e.getMessage());
+    }
+}
+// Saves the message in storedMessages.json (one JSON object per line)
+/*public void storeMessage() { //(Bray, 2017; Oracle, 2024a)
     // Escape slashes and quotes so they don't break the JSON
     String safeMessage = Textmessage.replace("\\", "\\\\").replace("\"", "\\\""); //(Bray, 2017; Oracle, 2024b)
     String json = "{\"messageID\":\"" + messageID + "\","
@@ -173,7 +223,7 @@ public void storeMessage() { //(Bray, 2017; Oracle, 2024a)
         System.out.println("Could not store the message.");
     }
 }
-
+*/
 // Details in the required order: Message ID, Message Hash, Recipient, Message
 public String details() {
     return "Message ID: " + messageID
