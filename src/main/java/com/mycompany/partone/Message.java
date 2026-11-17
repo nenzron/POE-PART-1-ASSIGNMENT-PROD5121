@@ -224,6 +224,15 @@ public void storeMessage() { //(Bray, 2017; Oracle, 2024a)
     }
 }
 */
+// Part 3: getters so the arrays in Partone can be filled with this message's ID and hash
+public String getMessageID() {
+    return messageID;
+}
+
+public String getMessagehash() {
+    return messagehash;
+}
+
 // Details in the required order: Message ID, Message Hash, Recipient, Message
 public String details() {
     return "Message ID: " + messageID

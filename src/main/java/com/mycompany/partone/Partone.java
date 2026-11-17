@@ -91,6 +91,7 @@ while (option == true) {
     System.out.println("\n1) Send Messages");
     System.out.println("2) Show recently sent messages, Disclaimer: coming soon!");
     System.out.println("3) Quit");
+    System.out.println("Stored Messages");
     System.out.print("Choose an option: ");
 
     
@@ -185,12 +186,65 @@ while (option == true) {
             System.out.println("Goodbye.");
             input.close();
         }
+        
+         // Option 4 (Part 3): the Stored Messages menu
+        case 4 -> storedMessagesMenu(input);
+        
 
         // Anything else is not a valid menu choice
-        default -> System.out.println("Invalid option, please choose 1, 2 or 3.");
+        default -> System.out.println("Invalid option, please choose 1, 2,3 or 4");
     }
 }
     }
+     public void storedMessagesMenu(Scanner input) {
+          int count = readStoredMessages();
+          System.out.println("\n------------------------------");
+          System.out.println("Stored messages read from the JSON file: " + count);
+          System.out.println(displayStoredMessages());
+          
+          boolean back = false;    // the user has not asked to go back yet, thats why boolean = false
+          while (back == false) {  // keep showing the Stored Messages menu, until true which is option 7
+           
+              
+            System.out.println("\n----- STORED MESSAGES -----");
+            System.out.println("1) Display the sender and recipient of all stored messages");
+            System.out.println("2) Display the longest stored message");
+            System.out.println("3) Search for a message ID");
+            System.out.println("4) Search for all the messages for a recipient");
+            System.out.println("5) Delete a message using the message hash");
+            System.out.println("6) Display a report of all the stored messages");
+            System.out.println("7) Back to the main menu");
+            System.out.print("Choose an option: ");
+            
+            
+             int choice = Integer.parseInt(input.nextLine());
+
+            switch (choice) {
+                case 1 -> System.out.println("\n" + displaySenderAndRecipient());
+                case 2 -> System.out.println("\n" + displayLongestMessage());
+                case 3 -> {
+                    System.out.print("Enter the message ID: ");
+                    String id = input.nextLine();
+                    System.out.println("\n" + searchByMessageID(id));
+                }
+                case 4 -> {
+                    System.out.print("Enter the recipient cell (e.g. +27831234567): ");
+                    String recipient = input.nextLine();
+                    System.out.println("\n" + searchByRecipient(recipient));
+                }
+                case 5 -> {
+                    System.out.print("Enter the message hash (e.g. 00:0:HITONIGHT): ");
+                    String hash = input.nextLine();
+                    System.out.println("\n" + deleteByHash(hash));
+                }
+                case 6 -> System.out.println("\n" + displayReport());
+                case 7 -> back = true;
+                default -> System.out.println("Invalid option, please choose 1 to 7.");
+            }
+            
+            
+          }
+     }
 }
 
    
