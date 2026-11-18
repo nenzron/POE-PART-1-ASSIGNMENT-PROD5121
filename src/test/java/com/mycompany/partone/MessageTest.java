@@ -415,6 +415,190 @@ public class MessageTest {
         assertEquals("It is dinner time!", sent[1]);
         System.out.println("\"" + sent[0] + "\", \"" + sent[1] + "\"");
     }
+        // ---------- Part 3: Display the longest message ----------
+    // Test data messages 1 to 4 (developer entry). Parallel arrays: position 0 is message 1,
+    // position 1 is message 2, and so on.
+    @Test
+    @Order(19)
+    public void testPart3LongestMessage() {
+        heading("PART 3: DISPLAY THE LONGEST MESSAGE");
+
+        String[] ids = {"0012345678", "0112345678", "0212345678", "0312345678"};
+        String[] hashes = {"00:0:DIDCAKE", "01:1:WHERETIME", "02:2:YOHOOOOGATE", "03:3:ITTIME"};
+        String[] recipients = {"+27834557896", "+27838884567", "+27834484567", "0838884567"};
+        String[] messages = {"Did you get the cake?",
+            "Where are you? You are late! I have asked you to be on time.",
+            "Yohoooo, I am at your gate.",
+            "It is dinner time!"};
+
+        String result = Message.displayLongestMessage(ids, hashes, recipients, messages);
+
+        // The longest message is message 2, and its details come from the same position
+        // in the other parallel arrays
+        assertTrue(result.contains("Message: Where are you? You are late! I have asked you to be on time."));
+        assertTrue(result.contains("Message ID: 0112345678"));
+        assertTrue(result.contains("Message Hash: 01:1:WHERETIME"));
+        assertTrue(result.contains("Recipient: +27838884567"));
+
+        // The shorter messages are not displayed
+        assertFalse(result.contains("Did you get the cake?"));
+        assertFalse(result.contains("It is dinner time!"));
+        System.out.println(result);
+    }
+         // ---------- Part 3: Search for a message ID ----------
+    // Test data messages 1 to 4 (developer entry). Message 4 has the message ID 0838884567.
+    @Test
+    @Order(20)
+    public void testPart3SearchMessageID() {
+        heading("PART 3: SEARCH FOR A MESSAGE ID");
+
+        String[] ids = {"0012345678", "0112345678", "0212345678", "0838884567"};
+        String[] recipients = {"+27834557896", "+27838884567", "+27834484567", "0838884567"};
+        String[] messages = {"Did you get the cake?",
+            "Where are you? You are late! I have asked you to be on time.",
+            "Yohoooo, I am at your gate.",
+            "It is dinner time!"};
+
+        // The ID array is searched, and the position that was found is used in the other arrays
+        String result = Message.searchByMessageID(ids, recipients, messages, "0838884567");
+        assertTrue(result.contains("Message: It is dinner time!"));
+        assertFalse(result.contains("Did you get the cake?"));
+        System.out.println(result);
+
+        // An ID that is not in the array
+        assertEquals("No message with the ID 9999999999 was found.",
+                Message.searchByMessageID(ids, recipients, messages, "9999999999"));
+    }
+        // ---------- Part 3: Search all the messages sent or stored for a recipient ----------
+    // Test data messages 1 to 5. Messages 2 and 5 are Stored, messages 1 and 4 are Sent.
+    @Test
+    @Order(21)
+    public void testPart3SearchRecipient() {
+        heading("PART 3: SEARCH MESSAGES FOR A RECIPIENT");
+
+        // Stored Messages arrays (parallel): message 2 and message 5
+        String[] storedRecipients = {"+27838884567", "+27838884567"};
+        String[] storedMessages = {"Where are you? You are late! I have asked you to be on time.",
+            "Ok, I am leaving without you."};
+
+        // Sent Messages arrays (parallel): message 1 and message 4 (2 places are filled out of 4)
+        String[] sentRecipients = {"+27834557896", "0838884567", null, null};
+        String[] sentMessages = {"Did you get the cake?", "It is dinner time!", null, null};
+        int sentCount = 2;
+
+        String result = Message.searchByRecipient(storedRecipients, storedMessages,
+                sentRecipients, sentMessages, sentCount, "+27838884567");
+
+        // Both messages for the recipient are found, in the order they were stored
+        assertTrue(result.contains("Where are you? You are late! I have asked you to be on time."));
+        assertTrue(result.contains("Ok, I am leaving without you."));
+        assertTrue(result.indexOf("Where are you?") < result.indexOf("Ok, I am leaving"));
+
+        // The messages of the other recipients are not in the result
+        assertFalse(result.contains("Did you get the cake?"));
+        assertFalse(result.contains("It is dinner time!"));
+        System.out.println(result);
+
+        // A recipient without messages
+        assertEquals("No messages were found for +27000000000.",
+                Message.searchByRecipient(storedRecipients, storedMessages,
+                        sentRecipients, sentMessages, sentCount, "+27000000000"));
+    }
+        // ---------- Part 3: Delete a message using a message hash ----------
+    // Test data: Test Message 2. The stored messages are message 2 and message 5.
+    @Test
+    @Order(22)
+    public void testPart3DeleteMessageUsingHash() {
+        heading("PART 3: DELETE A MESSAGE USING THE MESSAGE HASH");
+        String testFile = "testStoredMessages.json";   // a test file, so storedMessages.json is not changed
+        new java.io.File(testFile).delete();
+
+        // Stored Messages arrays (parallel): message 2 and message 5, saved in the test file
+        String[] ids = {"0112345678", "0412345678"};
+        String[] hashes = {"01:1:WHERETIME", "04:4:OKYOU"};
+        String[] recipients = {"+27838884567", "+27838884567"};
+        String[] messages = {"Where are you? You are late! I have asked you to be on time.",
+            "Ok, I am leaving without you."};
+        Message.saveStoredMessages(testFile, ids, hashes, recipients, messages);
+
+        // The same steps as option 5 of the Stored Messages menu:
+        // 1) search the hash array for the hash of message 2
+        int position = Message.findPosition(hashes, "01:1:WHERETIME");
+        assertEquals(0, position);
+        String deletedMessage = messages[position];
+
+        // 2) remove that position from all four parallel arrays and save the file again
+        ids = Message.removeAt(ids, position);
+        hashes = Message.removeAt(hashes, position);
+        recipients = Message.removeAt(recipients, position);
+        messages = Message.removeAt(messages, position);
+        Message.saveStoredMessages(testFile, ids, hashes, recipients, messages);
+
+        // The system returns the message that was deleted
+        String result = Message.deletedMessageText(deletedMessage);
+        assertEquals("Message \"Where are you? You are late! I have asked you to be on time.\" successfully deleted.", result);
+        System.out.println(result);
+
+        // The message is no longer in the arrays, and message 5 moved up
+        assertEquals(1, messages.length);
+        assertEquals("Ok, I am leaving without you.", messages[0]);
+        assertEquals("04:4:OKYOU", hashes[0]);
+        assertEquals(-1, Message.findPosition(hashes, "01:1:WHERETIME"));
+
+        // The message is also gone from the file
+        String[] lines = Message.readStoredLines(testFile);
+        assertEquals(1, lines.length);
+        assertEquals("Ok, I am leaving without you.", Message.getJsonValue(lines[0], "message"));
+        new java.io.File(testFile).delete();
+    }
+        // ---------- Part 3: Display report ----------
+    // Test data messages 1 to 5. Messages 1 and 4 are Sent, messages 2 and 5 are Stored.
+    @Test
+    @Order(23)
+    public void testPart3DisplayReport() {
+        heading("PART 3: DISPLAY REPORT");
+
+        // Developer entry of messages 1 to 4 into the arrays
+        Message.createArrays(4, "fileThatDoesNotExist.json");
+        Message.addSentMessage("0012345678", "00:0:DIDCAKE", "+27834557896", "Did you get the cake?");
+        Message.addStoredMessage("0112345678", "01:1:WHERETIME");
+        Message.addDisregardedMessage("0212345678", "02:2:YOHOOOOGATE", "Yohoooo, I am at your gate.");
+        Message.addSentMessage("0838884567", "03:3:ITTIME", "0838884567", "It is dinner time!");
+
+        // The report of the SENT messages shows the message hash, recipient and message of each
+        String sentReport = Message.displaySentReport(Message.getSentHashes(),
+                Message.getSentRecipients(), Message.getSentMessages());
+        assertTrue(sentReport.contains("Message Hash: 00:0:DIDCAKE"));
+        assertTrue(sentReport.contains("Recipient: +27834557896"));
+        assertTrue(sentReport.contains("Message: Did you get the cake?"));
+        assertTrue(sentReport.contains("Message Hash: 03:3:ITTIME"));
+        assertTrue(sentReport.contains("Recipient: 0838884567"));
+        assertTrue(sentReport.contains("Message: It is dinner time!"));
+        assertTrue(sentReport.contains("Total sent messages: 2"));
+        assertFalse(sentReport.contains("Where are you?"));   // message 2 is stored, not sent
+        assertFalse(sentReport.contains("Yohoooo"));          // message 3 was disregarded
+        System.out.println(sentReport);
+
+        // No sent messages
+        assertEquals("There are no sent messages to report.",
+                Message.displaySentReport(new String[0], new String[0], new String[0]));
+
+        // The report of the STORED messages (message 2 and message 5) lists the full details
+        String[] ids = {"0112345678", "0412345678"};
+        String[] hashes = {"01:1:WHERETIME", "04:4:OKYOU"};
+        String[] recipients = {"+27838884567", "+27838884567"};
+        String[] messages = {"Where are you? You are late! I have asked you to be on time.",
+            "Ok, I am leaving without you."};
+        String storedReport = Message.displayReport("Ronewa", ids, hashes, recipients, messages);
+        assertTrue(storedReport.contains("Sender: Ronewa"));
+        assertTrue(storedReport.contains("Message Hash: 01:1:WHERETIME"));
+        assertTrue(storedReport.contains("Recipient: +27838884567"));
+        assertTrue(storedReport.contains("Message: Where are you? You are late! I have asked you to be on time."));
+        assertTrue(storedReport.contains("Message Hash: 04:4:OKYOU"));
+        assertTrue(storedReport.contains("Message: Ok, I am leaving without you."));
+        assertTrue(storedReport.contains("Total stored messages: 2"));
+        System.out.println(storedReport);
+    }
 }
     
 

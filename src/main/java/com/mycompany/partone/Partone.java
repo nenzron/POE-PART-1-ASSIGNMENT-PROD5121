@@ -322,13 +322,19 @@ while (option == true) {
                         // Save the smaller arrays, so the message is also removed from the file
                         Message.saveStoredMessages(fileName, storedIDs, storedHashes,
                                 storedRecipients, storedMessages);
-                        System.out.println("\nMessage \"" + deletedMessage + "\" successfully deleted.");
+                        System.out.println("\n" + Message.deletedMessageText(deletedMessage));
                     }
                 }
 
                 //  report with the full details of all the stored messages
-                case 6 -> System.out.println("\n" + Message.displayReport(
-                        sender, storedIDs, storedHashes, storedRecipients, storedMessages));
+               
+                    case 6 -> {
+                       // The report of the sent messages, then the report of the stored messages
+                       System.out.println("\n" + Message.displaySentReport(Message.getSentHashes(),
+                       Message.getSentRecipients(), Message.getSentMessages()));
+                       System.out.println("\n" + Message.displayReport(
+                       sender, storedIDs, storedHashes, storedRecipients, storedMessages));
+                    }
 
                 // Back to the main menu
                 case 7 -> back = true;

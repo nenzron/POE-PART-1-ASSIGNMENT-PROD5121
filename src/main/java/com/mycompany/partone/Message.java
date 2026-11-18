@@ -462,7 +462,12 @@ public static String displayReport(String sender, String[] ids, String[] hashes,
     }
     return text + "Total stored messages: " + messages.length;
 }
-// =====================================================================
+
+// The text the system shows after a message was deleted using its message hash.
+// The Stored Messages menu (option 5) displays this text, and the unit test checks it.
+public static String deletedMessageText(String deletedMessage) {
+    return "Message \"" + deletedMessage + "\" successfully deleted.";
+}// =====================================================================
 // PART 3: THE ARRAYS
 // =====================================================================
 // The arrays are in this class (and not inside Partone) so that the unit tests can fill them
@@ -472,6 +477,7 @@ public static String displayReport(String sender, String[] ids, String[] hashes,
 // in class (Farrell, 2022, p. 267). Nothing is hard-coded.
 private static String[] sentMessages = new String[0];        // Sent Messages array
 private static String[] sentRecipients = new String[0];      // who each sent message was sent to (parallel with sentMessages)
+private static String[] sentHashes = new String[0];          // the hash of each sent message (parallel with sentMessages)
 private static String[] disregardedMessages = new String[0]; // Disregarded Messages array
 private static String[] messageIDs = new String[0];          // Message ID array (all the messages)
 private static String[] messageHashes = new String[0];       // Message Hash array (all the messages)
@@ -489,6 +495,7 @@ public static void createArrays(int maxMessages, String fileName) {
 
     sentMessages = new String[maxMessages];
     sentRecipients = new String[maxMessages];
+    sentHashes = new String[maxMessages];
     disregardedMessages = new String[maxMessages];
     messageIDs = new String[earlierLines.length + maxMessages];
     messageHashes = new String[earlierLines.length + maxMessages];
@@ -507,6 +514,7 @@ public static void createArrays(int maxMessages, String fileName) {
 public static void addSentMessage(String id, String hash, String recipient, String text) {
     sentMessages[sentCount] = text;
     sentRecipients[sentCount] = recipient;   // same position = same message
+    sentHashes[sentCount] = hash;
     sentCount++;
     addIDAndHash(id, hash);
 }
@@ -544,9 +552,27 @@ private static String[] usedPart(String[] array, int count) {
 // Getters, used by the Stored Messages menu and by the unit tests
 public static String[] getSentMessages() { return usedPart(sentMessages, sentCount); }
 public static String[] getSentRecipients() { return usedPart(sentRecipients, sentCount); }
+public static String[] getSentHashes() { return usedPart(sentHashes, sentCount); }
 public static String[] getDisregardedMessages() { return usedPart(disregardedMessages, disregardedCount); }
 public static String[] getMessageIDs() { return usedPart(messageIDs, idCount); }
 public static String[] getMessageHashes() { return usedPart(messageHashes, idCount); }
+
+// Display report: lists all the SENT messages with the message hash, the recipient and the message.
+// The three parallel arrays are passed in, and one for loop shows position 0, 1, 2 ... of each.
+public static String displaySentReport(String[] hashes, String[] recipients, String[] messages) {
+    if (messages.length == 0) {
+        return "There are no sent messages to report.";
+    }
+    String text = "===== SENT MESSAGES REPORT =====\n";
+    for (int i = 0; i < messages.length; i++) {
+        text = text + "\nMessage " + (i + 1) + " of " + messages.length
+                + "\nMessage Hash: " + hashes[i]
+                + "\nRecipient: " + recipients[i]
+                + "\nMessage: " + messages[i]
+                + "\n------------------------------\n";
+    }
+    return text + "Total sent messages: " + messages.length;
+}
 
 // Details in the required order: Message ID, Message Hash, Recipient, Message
 public String details() {
