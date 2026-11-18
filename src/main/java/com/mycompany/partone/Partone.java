@@ -257,7 +257,44 @@ while (option == true) {
     }
 }
     }
- 
+
+    // PART 3: THE STORED MESSAGES MENU (main menu option 4)
+    
+    // When this menu opens, storedMessages.json is READ INTO the Stored Messages arrays.
+    // The messages that were read are displayed, then the user can use the arrays to:
+    
+    
+    public void storedMessagesMenu(Scanner input, String[] sentMessages,
+            String[] sentRecipients, int sentCount) {
+        String fileName = "storedMessages.json";
+
+        // read the JSON file. Each place in storedLines holds one stored message.
+        String[] storedLines = Message.readStoredLines(fileName);
+
+        // the number of messages in the file is the size of the Stored Messages arrays
+        // (the same idea as new String[golfmember] in that we did in class)
+        int storedCount = storedLines.length;
+        String[] storedIDs = new String[storedCount];
+        String[] storedHashes = new String[storedCount];
+        String[] storedRecipients = new String[storedCount];
+        String[] storedMessages = new String[storedCount];   // the Stored Messages array
+
+        // its fills the four parallel arrays. Position i is the same message in every array.
+        for (int i = 0; i < storedCount; i++) {
+            storedIDs[i] = Message.getJsonValue(storedLines[i], "messageID");
+            storedHashes[i] = Message.getJsonValue(storedLines[i], "messageHash");
+            storedRecipients[i] = Message.getJsonValue(storedLines[i], "recipient");
+            storedMessages[i] = Message.getJsonValue(storedLines[i], "message");
+        }
+
+        // it display the array that was read from the file
+        System.out.println("\n------------------------------");
+        System.out.println("Stored messages read from the JSON file: " + storedCount);
+        for (int i = 0; i < storedCount; i++) {
+            System.out.println((i + 1) + ") " + storedMessages[i]);
+        }
+
+       
 }
 
    
