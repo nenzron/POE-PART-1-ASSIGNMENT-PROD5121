@@ -89,6 +89,36 @@ int maxMessages = Integer.parseInt(input.nextLine());
 // Counts how many messages have been entered so far
 int entered = 0;
 
+// ---------------------------------------------------------------------------
+// PART 3: THE ARRAYS (normal arrays)
+// Each array is made with the number the user typed in (maxMessages), the same way the
+// golf members array is made in class: new String[golfmember] (Farrell, 2022, p. 267).
+// Nothing is hard-coded: the arrays start empty and are filled below while the user
+// sends, disregards or stores messages.
+// ---------------------------------------------------------------------------
+String[] sentMessages = new String[maxMessages];        // Sent Messages array
+String[] sentRecipients = new String[maxMessages];      // who each sent message was sent to (parallel with sentMessages)
+String[] disregardedMessages = new String[maxMessages]; // Disregarded Messages array
+
+// The Message ID and Message Hash arrays must contain ALL the messages. That includes the
+// messages that were stored in the JSON file earlier, so the file is read first and the
+// arrays are made big enough for the earlier messages PLUS the new messages of this run.
+String[] earlierLines = Message.readStoredLines("storedMessages.json");
+String[] messageHashes = new String[earlierLines.length + maxMessages];   // Message Hash array
+String[] messageIDs = new String[earlierLines.length + maxMessages];      // Message ID array
+
+// An array does not grow, so these counters remember how many places are already filled
+int sentCount = 0;
+int disregardedCount = 0;
+int idCount = 0;   // how many places of the Message ID and Message Hash arrays are filled
+
+// Put the ID and hash of every message that is already in the file into the two arrays
+for (int i = 0; i < earlierLines.length; i++) {
+    messageIDs[idCount] = Message.getJsonValue(earlierLines[i], "messageID");
+    messageHashes[idCount] = Message.getJsonValue(earlierLines[i], "messageHash");
+    idCount++;
+}
+
 // The menu keeps showing until the user chooses 3 (Quit)
 boolean option = true;
 
@@ -163,12 +193,35 @@ while (option == true) {
                         System.out.println("\n------------------------------");
                         System.out.println("\n" + msg.details());
                         System.out.println("The number of messages sent is: " + Message.returnTotalMessages());
+                        
+                        
+                        // Part 3: put the message in the Sent Messages array (next free place)
+                        sentMessages[sentCount] = Textmessage;
+                        sentRecipients[sentCount] = Reciepentcell;   // same position = same message
+                        sentCount++;
+                        // Part 3: every message also goes in the Message ID and Message Hash arrays
+                        messageIDs[idCount] = msg.getMessageID();
+                        messageHashes[idCount] = msg.getMessagehash();
+                        idCount++;
                    
                         entered++;
                     } else if (result.equals("Message successfully stored")) {
                      
+                         // Part 3: a stored message is saved in the JSON file by storeMessage();
+                        // here its ID and hash are added to the Message ID and Message Hash arrays
+                        messageIDs[idCount] = msg.getMessageID();
+                        messageHashes[idCount] = msg.getMessagehash();
+                        idCount++;
+                        
                         entered++;
                     } else if (result.equals("Press 0 to delete the message.")) {
+                        
+                          // Part 3: put the message in the Disregarded Messages array
+                        disregardedMessages[disregardedCount] = Textmessage;
+                        disregardedCount++;
+                        messageIDs[idCount] = msg.getMessageID();
+                        messageHashes[idCount] = msg.getMessagehash();
+                        idCount++;
                        
                         entered++;   // deleted message still uses up one of the messages
                     } else {
@@ -206,6 +259,9 @@ while (option == true) {
     }
  
 }
+
+   
+
 
    
 
