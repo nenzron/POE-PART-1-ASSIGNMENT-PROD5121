@@ -224,12 +224,12 @@ public void storeMessage() { //(Bray, 2017; Oracle, 2024a)
     }
 }
 */
-// =====================================================================
+
 // PART 3: METHODS THAT WORK WITH THE ARRAYS
-// =====================================================================
+
 // All the arrays are normal Java arrays. They are made in Partone with the
 // size the user typed in (for example new String[maxMessages]), the same way the golf
-// members array is made in class (Farrell, 2022, p. 267).
+// members array is made in class the second last week of the semester (Farrell, 2022, p. 267).
 // The Stored Messages arrays are PARALLEL arrays: position 0 of every array belongs to the
 // same message, position 1 to the next message, and so on (Farrell, 2022, p. 284).
 // The arrays are passed to the methods below as parameters (Farrell, 2022, p. 289).
@@ -246,7 +246,7 @@ public String getMessagehash() {
 // Reads storedMessages.json (a JSON array with one message object per line) and returns an
 // array with ONE LINE FOR EACH STORED MESSAGE. The size of the returned array is the number
 // of messages found in the file, so nothing is hard-coded. (Bray, 2017; Oracle, 2024c)
-public static String[] readStoredLines(String fileName) { //(Bray, 2017; Oracle, 2024c)
+public static String[] readStoredLines(String fileName) { 
     String content = "";
     try {
         File file = new File(fileName);
@@ -370,7 +370,7 @@ public static String[] removeAt(String[] array, int removePosition) {
     return smaller;
 }
 
-// 2a. Display the sender and recipient of all stored messages
+// Display the sender and recipient of all stored messages
 public static String displaySenderAndRecipient(String sender, String[] recipients) {
     if (recipients.length == 0) {
         return "There are no stored messages.";
@@ -382,7 +382,7 @@ public static String displaySenderAndRecipient(String sender, String[] recipient
     return text;
 }
 
-// 2b. Display the longest stored message. The loop remembers the position of the longest
+//  Display the longest stored message. The loop remembers the position of the longest
 // message so far (like finding the highest value in an array). The SAME position is then used
 // in the parallel arrays to show the ID, hash and recipient of that message.
 public static String displayLongestMessage(String[] ids, String[] hashes,
@@ -403,7 +403,7 @@ public static String displayLongestMessage(String[] ids, String[] hashes,
             + "\nMessage: " + messages[longest];
 }
 
-// 2c. Search for a message ID and display the corresponding recipient and message.
+//  Search for a message ID and display the corresponding recipient and message.
 // The message ID array is searched, and the position found is used in the other arrays.
 public static String searchByMessageID(String[] ids, String[] recipients,
         String[] messages, String idToFind) {
@@ -414,10 +414,9 @@ public static String searchByMessageID(String[] ids, String[] recipients,
     return "Recipient: " + recipients[position] + "\nMessage: " + messages[position];
 }
 
-// 2d. Search for all the messages for a particular recipient. Two sets of parallel arrays
+//  Search for all the messages for a particular recipient. Two sets of parallel arrays
 // are searched: the Stored Messages arrays (read from the JSON file) and the Sent Messages
-// arrays (sentCount tells us how many places of the sent arrays are filled). A recipient can
-// have many messages, so these loops do NOT stop early: every recipient in the array is checked.
+// arrays (sentCount tells us how many places of the sent arrays are filled). 
 public static String searchByRecipient(String[] storedRecipients, String[] storedMessages,
         String[] sentRecipients, String[] sentMessages, int sentCount, String recipientToFind) {
     String text = "";
@@ -445,7 +444,7 @@ public static String searchByRecipient(String[] storedRecipients, String[] store
     return "Messages for " + recipientToFind.trim() + ":\n" + text;
 }
 
-// 2f. Display a report that lists the full details of all the stored messages
+//  Display a report that lists the full details of all the stored messages
 public static String displayReport(String sender, String[] ids, String[] hashes,
         String[] recipients, String[] messages) {
     if (messages.length == 0) {

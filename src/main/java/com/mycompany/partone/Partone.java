@@ -311,14 +311,14 @@ while (option == true) {
 
             switch (choice) {
 
-                // a) sender and recipient of all stored messages
+                //  sender and recipient of all stored messages
                 case 1 -> System.out.println("\n" + Message.displaySenderAndRecipient(sender, storedRecipients));
 
-                // b) longest stored message
+                //  longest stored message
                 case 2 -> System.out.println("\n" + Message.displayLongestMessage(
                         storedIDs, storedHashes, storedRecipients, storedMessages));
 
-                // c) search for a message ID
+                // search for a message ID
                 case 3 -> {
                     System.out.print("Enter the message ID: ");
                     String idToFind = input.nextLine();
@@ -326,7 +326,7 @@ while (option == true) {
                             storedIDs, storedRecipients, storedMessages, idToFind));
                 }
 
-                // d) search for all the messages stored for / sent to a recipient. Both the Stored
+                // search for all the messages stored for / sent to a recipient. Both the Stored
                 // Messages arrays and the Sent Messages arrays are searched.
                 case 4 -> {
                     System.out.print("Enter the recipient cell (e.g. +27831234567): ");
@@ -335,7 +335,7 @@ while (option == true) {
                             sentRecipients, sentMessages, sentCount, recipientToFind));
                 }
 
-                // e) delete a message using the message hash
+                // delete a message using the message hash
                 case 5 -> {
                     System.out.print("Enter the message hash (e.g. 00:0:HITONIGHT): ");
                     String hashToFind = input.nextLine();
@@ -349,6 +349,9 @@ while (option == true) {
                         String deletedMessage = storedMessages[position];
 
                         // Remove the SAME position from all four parallel arrays, so they still match
+                        // removeAt: removing an item at a specific index across,
+                        //multiple arrays simultaneously to keep them synchronized.
+                        // position serves as the "link" that connects related data stored across separate arrays
                         storedIDs = Message.removeAt(storedIDs, position);
                         storedHashes = Message.removeAt(storedHashes, position);
                         storedRecipients = Message.removeAt(storedRecipients, position);
@@ -361,7 +364,7 @@ while (option == true) {
                     }
                 }
 
-                // f) report with the full details of all the stored messages
+                //  report with the full details of all the stored messages
                 case 6 -> System.out.println("\n" + Message.displayReport(
                         sender, storedIDs, storedHashes, storedRecipients, storedMessages));
 
