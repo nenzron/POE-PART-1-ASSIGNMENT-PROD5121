@@ -294,7 +294,84 @@ while (option == true) {
             System.out.println((i + 1) + ") " + storedMessages[i]);
         }
 
-       
+        // The menu keeps showing until the user chooses 7 (Back)
+        boolean back = false;
+        while (back == false) {
+            System.out.println("\n----- STORED MESSAGES -----");
+            System.out.println("1) Display the sender and recipient of all stored messages");
+            System.out.println("2) Display the longest stored message");
+            System.out.println("3) Search for a message ID");
+            System.out.println("4) Search for all the messages for a recipient");
+            System.out.println("5) Delete a message using the message hash");
+            System.out.println("6) Display a report of all the stored messages");
+            System.out.println("7) Back to the main menu");
+            System.out.print("Choose an option: ");
+
+            int choice = Integer.parseInt(input.nextLine());
+
+            switch (choice) {
+
+                // a) sender and recipient of all stored messages
+                case 1 -> System.out.println("\n" + Message.displaySenderAndRecipient(sender, storedRecipients));
+
+                // b) longest stored message
+                case 2 -> System.out.println("\n" + Message.displayLongestMessage(
+                        storedIDs, storedHashes, storedRecipients, storedMessages));
+
+                // c) search for a message ID
+                case 3 -> {
+                    System.out.print("Enter the message ID: ");
+                    String idToFind = input.nextLine();
+                    System.out.println("\n" + Message.searchByMessageID(
+                            storedIDs, storedRecipients, storedMessages, idToFind));
+                }
+
+                // d) search for all the messages stored for / sent to a recipient. Both the Stored
+                // Messages arrays and the Sent Messages arrays are searched.
+                case 4 -> {
+                    System.out.print("Enter the recipient cell (e.g. +27831234567): ");
+                    String recipientToFind = input.nextLine();
+                    System.out.println("\n" + Message.searchByRecipient(storedRecipients, storedMessages,
+                            sentRecipients, sentMessages, sentCount, recipientToFind));
+                }
+
+                // e) delete a message using the message hash
+                case 5 -> {
+                    System.out.print("Enter the message hash (e.g. 00:0:HITONIGHT): ");
+                    String hashToFind = input.nextLine();
+
+                    // Search the Message Hash array for the hash the user typed in
+                    int position = Message.findPosition(storedHashes, hashToFind);
+
+                    if (position == -1) {
+                        System.out.println("\nNo message with the hash " + hashToFind.trim() + " was found.");
+                    } else {
+                        String deletedMessage = storedMessages[position];
+
+                        // Remove the SAME position from all four parallel arrays, so they still match
+                        storedIDs = Message.removeAt(storedIDs, position);
+                        storedHashes = Message.removeAt(storedHashes, position);
+                        storedRecipients = Message.removeAt(storedRecipients, position);
+                        storedMessages = Message.removeAt(storedMessages, position);
+
+                        // Save the smaller arrays, so the message is also removed from the file
+                        Message.saveStoredMessages(fileName, storedIDs, storedHashes,
+                                storedRecipients, storedMessages);
+                        System.out.println("\nMessage \"" + deletedMessage + "\" successfully deleted.");
+                    }
+                }
+
+                // f) report with the full details of all the stored messages
+                case 6 -> System.out.println("\n" + Message.displayReport(
+                        sender, storedIDs, storedHashes, storedRecipients, storedMessages));
+
+                // Back to the main menu
+                case 7 -> back = true;
+
+                default -> System.out.println("Invalid option, please choose 1 to 7.");
+            }
+        }
+    }
 }
 
    
