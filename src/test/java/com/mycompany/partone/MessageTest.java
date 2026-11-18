@@ -393,7 +393,28 @@ public class MessageTest {
         assertEquals(text, Message.getJsonValue(lastLine, "message"));
         System.out.println("Result: " + result);
     }
-    
+        // ---------- Part 3: Sent Messages array correctly populated ----------
+    // Developer entry of test data messages 1 to 4. The flag decides which array a message goes in.
+    @Test
+    @Order(18)
+    public void testPart3SentMessagesArray() {
+        heading("PART 3: SENT MESSAGES ARRAY");
+
+        // Make the arrays for 4 messages. The file does not exist, so no earlier messages are read.
+        Message.createArrays(4, "fileThatDoesNotExist.json");
+
+        Message.addSentMessage("0012345678", "00:0:DIDCAKE", "+27834557896", "Did you get the cake?"); // Message 1: Sent
+        Message.addStoredMessage("0112345678", "01:1:WHERETIME");                                      // Message 2: Stored
+        Message.addDisregardedMessage("0212345678", "02:2:YOHOOOOGATE", "Yohoooo, I am at your gate."); // Message 3: Disregard
+        Message.addSentMessage("0312345678", "03:3:ITTIME", "0838884567", "It is dinner time!");        // Message 4: Sent
+
+        // The Sent Messages array contains only the two sent messages
+        String[] sent = Message.getSentMessages();
+        assertEquals(2, sent.length);
+        assertEquals("Did you get the cake?", sent[0]);
+        assertEquals("It is dinner time!", sent[1]);
+        System.out.println("\"" + sent[0] + "\", \"" + sent[1] + "\"");
+    }
 }
     
 

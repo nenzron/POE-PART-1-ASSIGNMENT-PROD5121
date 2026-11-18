@@ -90,35 +90,9 @@ int maxMessages = Integer.parseInt(input.nextLine());
 int entered = 0;
 
 // ---------------------------------------------------------------------------
-// PART 3: THE ARRAYS (normal arrays)
-// Each array is made with the number the user typed in (maxMessages), the same way the
-// golf members array is made in class: new String[golfmember] (Farrell, 2022, p. 267).
-// Nothing is hard-coded: the arrays start empty and are filled below while the user
-// sends, disregards or stores messages.
-// ---------------------------------------------------------------------------
-String[] sentMessages = new String[maxMessages];        // Sent Messages array
-String[] sentRecipients = new String[maxMessages];      // who each sent message was sent to (parallel with sentMessages)
-String[] disregardedMessages = new String[maxMessages]; // Disregarded Messages array
-
-// The Message ID and Message Hash arrays must contain ALL the messages. That includes the
-// messages that were stored in the JSON file earlier, so the file is read first and the
-// arrays are made big enough for the earlier messages PLUS the new messages of this run.
-String[] earlierLines = Message.readStoredLines("storedMessages.json");
-String[] messageHashes = new String[earlierLines.length + maxMessages];   // Message Hash array
-String[] messageIDs = new String[earlierLines.length + maxMessages];      // Message ID array
-
-// An array does not grow, so these counters remember how many places are already filled
-int sentCount = 0;
-int disregardedCount = 0;
-int idCount = 0;   // how many places of the Message ID and Message Hash arrays are filled
-
-// Put the ID and hash of every message that is already in the file into the two arrays
-for (int i = 0; i < earlierLines.length; i++) {
-    messageIDs[idCount] = Message.getJsonValue(earlierLines[i], "messageID");
-    messageHashes[idCount] = Message.getJsonValue(earlierLines[i], "messageHash");
-    idCount++;
-}
-
+// PART 3: the arrays are made in the Message class (so they can be unit tested). They are
+// made with the number the user typed in (maxMessages) and with the messages in the JSON file.
+Message.createArrays(maxMessages, "storedMessages.json");
 // The menu keeps showing until the user chooses 3 (Quit)
 boolean option = true;
 
@@ -195,34 +169,21 @@ while (option == true) {
                         System.out.println("The number of messages sent is: " + Message.returnTotalMessages());
                         
                         
-                        // Part 3: put the message in the Sent Messages array (next free place)
-                        sentMessages[sentCount] = Textmessage;
-                        sentRecipients[sentCount] = Reciepentcell;   // same position = same message
-                        sentCount++;
-                        // Part 3: every message also goes in the Message ID and Message Hash arrays
-                        messageIDs[idCount] = msg.getMessageID();
-                        messageHashes[idCount] = msg.getMessagehash();
-                        idCount++;
-                   
+                        
+                       // Part 3: put the message in the Sent Messages arrays and in the Message ID / Hash arrays
+                        Message.addSentMessage(msg.getMessageID(), msg.getMessagehash(), Reciepentcell, Textmessage);
                         entered++;
                     } else if (result.equals("Message successfully stored")) {
                      
-                         // Part 3: a stored message is saved in the JSON file by storeMessage();
-                        // here its ID and hash are added to the Message ID and Message Hash arrays
-                        messageIDs[idCount] = msg.getMessageID();
-                        messageHashes[idCount] = msg.getMessagehash();
-                        idCount++;
-                        
+                         
+                        // Part 3: the message was saved in the JSON file by storeMessage(); its ID and hash
+                        // are added to the Message ID and Message Hash arrays
+                        Message.addStoredMessage(msg.getMessageID(), msg.getMessagehash());
                         entered++;
                     } else if (result.equals("Press 0 to delete the message.")) {
                         
-                          // Part 3: put the message in the Disregarded Messages array
-                        disregardedMessages[disregardedCount] = Textmessage;
-                        disregardedCount++;
-                        messageIDs[idCount] = msg.getMessageID();
-                        messageHashes[idCount] = msg.getMessagehash();
-                        idCount++;
-                       
+                         // Part 3: put the message in the Disregarded Messages array and in the ID / Hash arrays
+                        Message.addDisregardedMessage(msg.getMessageID(), msg.getMessagehash(), Textmessage);
                         entered++;   // deleted message still uses up one of the messages
                     } else {
                         i--;         // wrong option, so ask for this message again
@@ -249,7 +210,8 @@ while (option == true) {
         }
         
          // Option 4 (Part 3): the Stored Messages menu
-        case 4 -> storedMessagesMenu(input, sentMessages, sentRecipients, sentCount);
+        case 4 -> storedMessagesMenu(input, Message.getSentMessages(), Message.getSentRecipients(),
+                Message.getSentMessages().length);
         
 
         // Anything else is not a valid menu choice

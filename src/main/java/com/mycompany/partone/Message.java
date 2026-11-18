@@ -462,7 +462,91 @@ public static String displayReport(String sender, String[] ids, String[] hashes,
     }
     return text + "Total stored messages: " + messages.length;
 }
+// =====================================================================
+// PART 3: THE ARRAYS
+// =====================================================================
+// The arrays are in this class (and not inside Partone) so that the unit tests can fill them
+// with the test data and check them with assertEquals. They are normal arrays. Their size comes
+// from the user (new String[maxMessages]) and, for the Message ID and Message Hash arrays, from
+// the number of messages already in the JSON file, the same idea as new String[golfmember]
+// in class (Farrell, 2022, p. 267). Nothing is hard-coded.
+private static String[] sentMessages = new String[0];        // Sent Messages array
+private static String[] sentRecipients = new String[0];      // who each sent message was sent to (parallel with sentMessages)
+private static String[] disregardedMessages = new String[0]; // Disregarded Messages array
+private static String[] messageIDs = new String[0];          // Message ID array (all the messages)
+private static String[] messageHashes = new String[0];       // Message Hash array (all the messages)
 
+// An array does not grow, so these counters remember how many places are already filled
+private static int sentCount = 0;
+private static int disregardedCount = 0;
+private static int idCount = 0;
+
+// Makes the arrays. maxMessages is the number the user typed in ("How many messages do you wish
+// to send?"). The ID and Hash arrays must contain ALL the messages, so the JSON file is read first
+// and these two arrays are made big enough for the earlier messages PLUS the new messages.
+public static void createArrays(int maxMessages, String fileName) {
+    String[] earlierLines = readStoredLines(fileName);
+
+    sentMessages = new String[maxMessages];
+    sentRecipients = new String[maxMessages];
+    disregardedMessages = new String[maxMessages];
+    messageIDs = new String[earlierLines.length + maxMessages];
+    messageHashes = new String[earlierLines.length + maxMessages];
+    sentCount = 0;
+    disregardedCount = 0;
+    idCount = 0;
+
+    // Put the ID and hash of every message that is already in the file into the two arrays
+    for (int i = 0; i < earlierLines.length; i++) {
+        addIDAndHash(getJsonValue(earlierLines[i], "messageID"),
+                getJsonValue(earlierLines[i], "messageHash"));
+    }
+}
+
+// A message with the flag Sent: goes in the Sent Messages arrays and the ID / Hash arrays
+public static void addSentMessage(String id, String hash, String recipient, String text) {
+    sentMessages[sentCount] = text;
+    sentRecipients[sentCount] = recipient;   // same position = same message
+    sentCount++;
+    addIDAndHash(id, hash);
+}
+
+// A message with the flag Disregard: goes in the Disregarded Messages array and the ID / Hash arrays
+public static void addDisregardedMessage(String id, String hash, String text) {
+    disregardedMessages[disregardedCount] = text;
+    disregardedCount++;
+    addIDAndHash(id, hash);
+}
+
+// A message with the flag Stored: storeMessage() already saved it in the JSON file, so only the
+// ID / Hash arrays are filled here (the stored messages are read back from the file)
+public static void addStoredMessage(String id, String hash) {
+    addIDAndHash(id, hash);
+}
+
+// Puts the ID and the hash in the next free place of the two arrays
+private static void addIDAndHash(String id, String hash) {
+    messageIDs[idCount] = id;
+    messageHashes[idCount] = hash;
+    idCount++;
+}
+
+// Copies the filled part of an array into a new array of exactly that size (an array has empty
+// places at the end, which would otherwise show as null)
+private static String[] usedPart(String[] array, int count) {
+    String[] result = new String[count];
+    for (int i = 0; i < count; i++) {
+        result[i] = array[i];
+    }
+    return result;
+}
+
+// Getters, used by the Stored Messages menu and by the unit tests
+public static String[] getSentMessages() { return usedPart(sentMessages, sentCount); }
+public static String[] getSentRecipients() { return usedPart(sentRecipients, sentCount); }
+public static String[] getDisregardedMessages() { return usedPart(disregardedMessages, disregardedCount); }
+public static String[] getMessageIDs() { return usedPart(messageIDs, idCount); }
+public static String[] getMessageHashes() { return usedPart(messageHashes, idCount); }
 
 // Details in the required order: Message ID, Message Hash, Recipient, Message
 public String details() {
