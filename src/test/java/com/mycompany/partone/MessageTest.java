@@ -263,6 +263,62 @@ public class MessageTest {
         assertEquals("Message successfully stored", result);
         System.out.println("Result: " + result);
     }
+    
+        // ---------- Part 3 Test Data Message 1 (Flag: Sent) ----------
+    @Test
+    @Order(13)
+    public void testPart3Message1Sent() {
+        heading("PART 3 TEST DATA MESSAGE 1: SENT");
+        String recipient = "+27834557896";
+        String text = "Did you get the cake?";
+        Message msg = new Message("0012345678", recipient, "", "", 0, 0, text, "", "");
+
+        // The recipient number and the message length are valid
+        assertEquals("Cell phone number successfully captured.", Message.checkReciepentCell(recipient));
+        assertEquals("Message is ready to send.", Message.checkmessagelenght(text));
+
+        // The hash is: first 2 digits of the ID : message number : FIRSTWORDLASTWORD
+        assertEquals("00:0:DIDCAKE", msg.createMessagehash());
+
+        // The flag is Sent, which is option 1 in the menu
+        System.setIn(new ByteArrayInputStream("1\n".getBytes()));
+        String result = msg.sentMessage();
+        assertEquals("Message successfully sent.", result);
+
+        // The message is now in the list of sent messages
+        assertTrue(Message.printMessages().contains("Message: Did you get the cake?"));
+        System.out.println("Result: " + result);
+    }
+      // ---------- Part 3 Test Data Message 2 (Flag: Stored) ----------
+    @Test
+    @Order(14)
+    public void testPart3Message2Stored() {
+        heading("PART 3 TEST DATA MESSAGE 2: STORED");
+        String recipient = "+27838884567";
+        String text = "Where are you? You are late! I have asked you to be on time.";
+        Message msg = new Message("0112345678", recipient, "", "", 0, 1, text, "", "");
+
+        // The recipient number and the message length are valid
+        assertEquals("Cell phone number successfully captured.", Message.checkReciepentCell(recipient));
+        assertEquals("Message is ready to send.", Message.checkmessagelenght(text));
+
+        // The hash is: first 2 digits of the ID : message number : FIRSTWORDLASTWORD
+        assertEquals("01:1:WHERETIME", msg.createMessagehash());
+
+        // The flag is Stored, which is option 3 in the menu
+        System.setIn(new ByteArrayInputStream("3\n".getBytes()));
+        String result = msg.sentMessage();
+        assertEquals("Message successfully stored", result);
+
+        // The message was saved in storedMessages.json: it is the last message in the file
+        String[] storedLines = Message.readStoredLines("storedMessages.json");
+        String lastLine = storedLines[storedLines.length - 1];
+        assertEquals("0112345678", Message.getJsonValue(lastLine, "messageID"));
+        assertEquals("01:1:WHERETIME", Message.getJsonValue(lastLine, "messageHash"));
+        assertEquals(recipient, Message.getJsonValue(lastLine, "recipient"));
+        assertEquals(text, Message.getJsonValue(lastLine, "message"));
+        System.out.println("Result: " + result);
+    }
 }
     
 
