@@ -319,6 +319,81 @@ public class MessageTest {
         assertEquals(text, Message.getJsonValue(lastLine, "message"));
         System.out.println("Result: " + result);
     }
+        // ---------- Part 3 Test Data Message 3 (Flag: Disregard) ----------
+    @Test
+    @Order(15)
+    public void testPart3Message3Disregard() {
+        heading("PART 3 TEST DATA MESSAGE 3: DISREGARD");
+        String recipient = "+27834484567";
+        String text = "Yohoooo, I am at your gate.";
+        Message msg = new Message("0212345678", recipient, "", "", 0, 2, text, "", "");
+
+        // The recipient number and the message length are valid
+        assertEquals("Cell phone number successfully captured.", Message.checkReciepentCell(recipient));
+        assertEquals("Message is ready to send.", Message.checkmessagelenght(text));
+
+        // The hash is: first 2 digits of the ID : message number : FIRSTWORDLASTWORD
+        assertEquals("02:2:YOHOOOOGATE", msg.createMessagehash());
+
+        // The flag is Disregard, which is option 2 in the menu
+        System.setIn(new ByteArrayInputStream("2\n".getBytes()));
+        String result = msg.sentMessage();
+        assertEquals("Press 0 to delete the message.", result);
+
+        // A disregarded message is not sent, so it must not be in the list of sent messages
+        assertFalse(Message.printMessages().contains("Yohoooo, I am at your gate."));
+        System.out.println("Result: " + result);
+    }
+        // ---------- Part 3 Test Data Message 4 (Flag: Sent, but the number has no +27) ----------
+    @Test
+    @Order(16)
+    public void testPart3Message4Recipient() {
+        heading("PART 3 TEST DATA MESSAGE 4: RECIPIENT WITHOUT +27");
+        String recipient = "0838884567";
+        String text = "It is dinner time !";
+
+        // The number does not start with +27, so it is not accepted and the message is not sent
+        assertEquals("Cell phone number is incorrectly formatted or does not contain an international code. "
+                + "Please correct the number and try again.", Message.checkReciepentCell(recipient));
+
+        // The message itself is short enough
+        assertEquals("Message is ready to send.", Message.checkmessagelenght(text));
+
+        // The message was never sent, so it is not in the list of sent messages
+        assertFalse(Message.printMessages().contains("It is dinner time !"));
+        System.out.println(Message.checkReciepentCell(recipient));
+    }
+        // ---------- Part 3 Test Data Message 5 (Flag: Stored) ----------
+    @Test
+    @Order(17)
+    public void testPart3Message5Stored() {
+        heading("PART 3 TEST DATA MESSAGE 5: STORED");
+        String recipient = "+27838884567";
+        String text = "Ok, I am leaving without you.";
+        Message msg = new Message("0412345678", recipient, "", "", 0, 4, text, "", "");
+
+        // The recipient number and the message length are valid
+        assertEquals("Cell phone number successfully captured.", Message.checkReciepentCell(recipient));
+        assertEquals("Message is ready to send.", Message.checkmessagelenght(text));
+
+        // The hash is: first 2 digits of the ID : message number : FIRSTWORDLASTWORD
+        assertEquals("04:4:OKYOU", msg.createMessagehash());
+
+        // The flag is Stored, which is option 3 in the menu
+        System.setIn(new ByteArrayInputStream("3\n".getBytes()));
+        String result = msg.sentMessage();
+        assertEquals("Message successfully stored", result);
+
+        // The message was saved in storedMessages.json: it is the last message in the file
+        String[] storedLines = Message.readStoredLines("storedMessages.json");
+        String lastLine = storedLines[storedLines.length - 1];
+        assertEquals("0412345678", Message.getJsonValue(lastLine, "messageID"));
+        assertEquals("04:4:OKYOU", Message.getJsonValue(lastLine, "messageHash"));
+        assertEquals(recipient, Message.getJsonValue(lastLine, "recipient"));
+        assertEquals(text, Message.getJsonValue(lastLine, "message"));
+        System.out.println("Result: " + result);
+    }
+    
 }
     
 
