@@ -360,7 +360,7 @@ public class MessageTest {
         assertEquals("Message is ready to send.", Message.checkmessagelenght(text));
 
         // The message was never sent, so it is not in the list of sent messages
-        assertFalse(Message.printMessages().contains("It is dinner time !"));
+        assertFalse(Message.printMessages().contains("It is dinner time!"));
         System.out.println(Message.checkReciepentCell(recipient));
     }
         // ---------- Part 3 Test Data Message 5 (Flag: Stored) ----------

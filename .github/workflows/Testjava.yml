@@ -1,0 +1,24 @@
+name: TestJava
+
+# Run on every push and every pull request
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Download your code onto the GitHub machine
+      - uses: actions/checkout@v4
+
+      # Install Java (use the same version as maven.compiler.release in your pom.xml)
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '26'
+          cache: maven
+
+      # Build the project and run all the JUnit tests
+      - name: Build and test
+        run: mvn -B test
