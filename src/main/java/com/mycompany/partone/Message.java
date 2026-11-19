@@ -381,6 +381,9 @@ public static String displaySenderAndRecipient(String sender, String[] recipient
     }
     return text;
 }
+  
+
+
 
 //  Display the longest stored message. The loop remembers the position of the longest
 // message so far (like finding the highest value in an array). The SAME position is then used
